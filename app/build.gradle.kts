@@ -80,6 +80,11 @@ dependencies {
 
     // Spotify App Remote SDK
     implementation(files("../spotify-app-remote-release-0.8.0.aar"))
+    // Note: Ensure the Spotify App Remote SDK is correctly placed in the project structure
+
+    // to authenticate and interact with Spotify.
+    implementation("com.spotify.android:auth:1.2.3")
+
 
     // Lifecycle (ViewModel, LiveData)
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0") // Updated for Kotlin 2.0.x
@@ -93,6 +98,7 @@ dependencies {
     // Hilt (Dependency Injection)
     implementation("com.google.dagger:hilt-android:2.56.1")
     ksp("com.google.dagger:hilt-android-compiler:2.56.1")
+    implementation("androidx.hilt:hilt-navigation-fragment:1.2.0")
 
     // Retrofit + Gson + OkHttp
     implementation("com.squareup.retrofit2:retrofit:2.11.0") // Updated for Kotlin 2.0.x
@@ -116,7 +122,7 @@ dependencies {
     implementation("com.tbuonomo:dotsindicator:5.1.0")
 
     // Coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
 
     // Firebase (FCM)
     implementation("com.google.firebase:firebase-messaging:23.4.1")
@@ -147,5 +153,6 @@ dependencies {
     implementation("androidx.media3:media3-ui:1.7.1")
     // for PlayerNotificationManager
 
-
+    // browser
+    implementation("androidx.browser:browser:1.8.0")
 }

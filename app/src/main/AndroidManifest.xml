@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -11,19 +15,66 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Spoti5">
+<!--        <activity-->
+<!--            android:name=".presentations.feature.auth.MySpotifyAuthorizationActivity"-->
+<!--            android:launchMode="singleInstance"-->
+<!--            android:exported="true" >-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.VIEW"/>-->
+<!--                <category android:name="android.intent.category.DEFAULT"/>-->
+<!--                <category android:name="android.intent.category.BROWSABLE"/>-->
+<!--                <data-->
+<!--                    android:scheme="yourapp"-->
+<!--                    android:host="callback"/>-->
+<!--            </intent-filter>-->
+<!--        </activity>-->
+
         <activity
-            android:name=".MainActivity"
-            android:exported="true">
+            android:name=".presentations.feature.auth.ActivityContainer"
+            android:exported="false"
+            android:theme="@style/Theme.Spoti5" />
+
+        <meta-data
+            android:name="com.spotify.sdk.android.auth.CLIENT_ID"
+            android:value="your_client_id" />
+
+        <activity
+            android:name="com.spotify.sdk.android.auth.LoginActivity"
+            android:exported="true"
+            tools:replace="android:exported" />
+        <activity
+            android:name=".presentations.feature.auth.LoginHolderActivity"
+            android:exported="true"
+            android:launchMode="singleTask">
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="yourapp" android:host="callback" />
+            </intent-filter>
+            <!-- Default launcher -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
-
-                <data
-                    android:scheme="yourapp"
-                    android:host="callback" />
-                <!--  open in new activity               -->
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:exported="false">
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+
+
+            <!-- <data -->
+            <!-- android:host="callback" -->
+            <!-- android:scheme="yourapp" /> -->
+            <!-- &lt;!&ndash; open in new activity &ndash;&gt; -->
+            <!-- </intent-filter> -->
         </activity>
     </application>
 
