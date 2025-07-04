@@ -59,4 +59,12 @@ class SharePrefUtils @Inject constructor(@ApplicationContext context: Context) {
             editor.putInt("countOpenAppTestFlow", value)
             editor.apply()
         }
+
+
+    var saveAccessToken
+        get() = pre.getString("access_token", null)
+        set(value) {
+            editor.putString("access_token", value)
+            editor.apply()
+        }
 }
