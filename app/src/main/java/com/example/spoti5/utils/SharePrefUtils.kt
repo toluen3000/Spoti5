@@ -65,6 +65,9 @@ class SharePrefUtils @Inject constructor(@ApplicationContext context: Context) {
         get() = pre.getString("access_token", null)
         set(value) {
             editor.putString("access_token", value)
+            editor.putLong("expire_time", System.currentTimeMillis() + 3600000) // 1 hour
             editor.apply()
         }
+
+
 }

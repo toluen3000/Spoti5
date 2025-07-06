@@ -17,39 +17,40 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Spoti5">
 
-        <activity android:name="com.spotify.sdk.android.auth.LoginActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="yourapp" android:host="callback" />
-            </intent-filter>
-        </activity>
-
-
-
-
         <activity
-            android:name=".presentations.feature.auth.MainActivity"
+            android:name="com.spotify.sdk.android.auth.LoginActivity"
             android:exported="true">
-
-             <intent-filter>
-             <action android:name="android.intent.action.MAIN" />
-
-             <category android:name="android.intent.category.LAUNCHER" />
-
-             </intent-filter>
-
-            <!-- ADD THIS for Spotify redirect handling -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:scheme="yourapp"
-                    android:host="callback" />
+                    android:host="callback"
+                    android:scheme="yourapp" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".presentations.feature.auth.MainActivity"
+            android:theme="@style/Theme.App.SplashScreen"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <!-- ADD THIS for Spotify redirect handling -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="callback"
+                    android:scheme="yourapp" />
             </intent-filter>
         </activity>
     </application>

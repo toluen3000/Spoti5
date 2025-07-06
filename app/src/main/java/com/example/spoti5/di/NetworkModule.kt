@@ -1,7 +1,9 @@
 package com.example.spoti5.di
 
-import com.example.spoti5.data.apis.AppApi
 import com.example.spoti5.constants.Constants
+import com.example.spoti5.data.apis.SpotifyApi
+import com.example.spoti5.data.remote.interceptor.AuthorizationInterceptor
+import com.google.gson.Gson
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -11,6 +13,7 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
 
@@ -26,32 +29,54 @@ object NetworkModule {
         return httpLoggingInterceptor
     }
 
+//    @Provides
+//    @Singleton
+//    fun provideMoshiConverterFactory() : MoshiConverterFactory {
+//        val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+//        return MoshiConverterFactory.create(moshi)
+//    }
+
     @Provides
     @Singleton
-    fun provideMoshiConverterFactory() : MoshiConverterFactory {
-        val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
-        return MoshiConverterFactory.create(moshi)
+    fun provideGsonConverterFactory(): GsonConverterFactory {
+        val gson = GsonConverterFactory.create()
+        return gson
     }
+
 
     //rieng
     @Provides
     @Singleton
-    fun provideOkHttpClient(httpLoggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
+    fun provideOkHttpClient(httpLoggingInterceptor: HttpLoggingInterceptor
+                , authorizationInterceptor: AuthorizationInterceptor
+    ): OkHttpClient {
         val builder = OkHttpClient.Builder()
-        builder.interceptors().add(httpLoggingInterceptor)
+        builder.addInterceptor(httpLoggingInterceptor)
+            .addInterceptor(authorizationInterceptor)
         return builder.build()
     }
 
-    @Provides
-    @Singleton
-    fun provideRetrofit(okHttpClient: OkHttpClient, moshiConverterFactory: MoshiConverterFactory): Retrofit {
-        return Retrofit.Builder().addConverterFactory(moshiConverterFactory).baseUrl(Constants.BASE_URL).client(okHttpClient).build()
-    }
+//    @Provides
+//    @Singleton
+//    fun provideRetrofit(okHttpClient: OkHttpClient, moshiConverterFactory: MoshiConverterFactory): Retrofit {
+//        return Retrofit.Builder().addConverterFactory(moshiConverterFactory).baseUrl(Constants.BASE_URL).client(okHttpClient).build()
+//    }
 
     @Provides
     @Singleton
-    fun provideAppApi(retrofit: Retrofit): AppApi {
-        return retrofit.create(AppApi::class.java)
+    fun provideRetrofit2(okHttpClient: OkHttpClient, gson: GsonConverterFactory): Retrofit {
+        return Retrofit.Builder().
+        addConverterFactory(gson)
+            .baseUrl(Constants.BASE_URL)
+            .client(okHttpClient)
+            .build()
+    }
+
+
+    @Provides
+    @Singleton
+    fun provideSpotifyApi(retrofit: Retrofit): SpotifyApi {
+        return retrofit.create(SpotifyApi::class.java)
     }
 
 

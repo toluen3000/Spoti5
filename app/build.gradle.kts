@@ -156,4 +156,7 @@ dependencies {
 
     // browser
     implementation("androidx.browser:browser:1.8.0")
+
+    //splash screen
+    implementation("androidx.core:core-splashscreen:1.0.0")
 }
