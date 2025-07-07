@@ -1,0 +1,23 @@
+package com.example.spoti5.domain.repository
+
+import com.example.spoti5.data.dto.album.NewAlbumsReleaseDto
+import com.example.spoti5.data.result.Result
+import com.example.spoti5.domain.model.album.AlbumModel
+import com.example.spoti5.domain.model.album.AlbumsModel
+import com.example.spoti5.domain.model.album.NewAlbumsReleaseModel
+import com.example.spoti5.domain.model.album.TracksModel
+
+interface AlbumsRepository {
+
+    suspend fun getAlbumById(albumId: String): Result<AlbumModel>
+
+    suspend fun getAlbumTracks(albumId: String): Result<TracksModel>
+
+//    suspend fun getNewAlbumsRelease(): Result<List<NewAlbumsReleaseModel>>
+
+//    suspend fun getNewAlbumsRelease(): Result<NewAlbumsReleaseModel>
+
+    suspend fun getNewAlbumsRelease(): Result<List<AlbumModel>>
+
+//    suspend fun getNewAlbumsRelease(): Result<List<AlbumsModel>>
+}
