@@ -59,7 +59,6 @@ android {
         buildConfig = true
     }
 
-
 }
 
 dependencies {
@@ -162,4 +161,6 @@ dependencies {
 
     // round image view
     implementation("de.hdodenhof:circleimageview:3.1.0")
+
+
 }
