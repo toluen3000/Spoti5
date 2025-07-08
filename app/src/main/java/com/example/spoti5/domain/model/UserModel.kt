@@ -8,6 +8,6 @@ data class UserModel (
     val country: String?,
     )
 
-data class Image(
+data class ImageModel(
     val url: String,
 )

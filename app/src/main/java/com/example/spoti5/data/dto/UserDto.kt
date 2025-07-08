@@ -1,5 +1,6 @@
 package com.example.spoti5.data.dto
 
+import com.example.spoti5.domain.model.ImageModel
 import com.example.spoti5.domain.model.UserModel
 import com.google.gson.annotations.SerializedName
 
@@ -29,5 +30,11 @@ data class UserDto(
 data class ImageDto(
     @SerializedName("url")
     val url: String
-)
+){
+    fun toDomainModel(): ImageModel {
+        return ImageModel(
+            url = url
+        )
+    }
+}
 
