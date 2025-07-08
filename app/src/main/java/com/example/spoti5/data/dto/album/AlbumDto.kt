@@ -9,7 +9,7 @@ import com.google.gson.annotations.SerializedName
 
 data class AlbumDto(
     @SerializedName("id")
-    val id: String?,
+    val id: String,
     @SerializedName("name")
     val name: String?,
     @SerializedName("release_date")
@@ -33,16 +33,16 @@ data class AlbumDto(
 
     fun toDomainModel(): AlbumModel {
         return AlbumModel(
-            id = id ?: "",
+            id = id,
             name = name ?: "Unknown",
             releaseDate = releaseDate ?: "Unknown",
             albumType = albumType ?: "Unknown",
-            images = images ?: emptyList(),
+            images = images?.map { it.toDomainModel() } ?: emptyList(),
             artists = artists?.map { it.toDomainModel() } ?: emptyList(),
             tracks = tracks?.toDomainModel(),
             total_tracks = total_tracks,
             uri = uri,
-            externalUrls = externalUrls?.toUrlOrDefault(id ?: "")
+            externalUrls = externalUrls?.toUrlOrDefault(id)
         )
     }
 
@@ -62,7 +62,7 @@ data class TrackItemDto(
     @SerializedName("name")
     val name: String?,
     @SerializedName("id")
-    val id: String?,
+    val id: String,
     @SerializedName("uri")
     val uri: String?,
     @SerializedName("artists")

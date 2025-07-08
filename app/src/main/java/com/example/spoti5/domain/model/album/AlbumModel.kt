@@ -1,14 +1,12 @@
 package com.example.spoti5.domain.model.album
-
-import com.example.spoti5.data.dto.ImageDto
-import com.google.gson.annotations.SerializedName
+import com.example.spoti5.domain.model.ImageModel
 
 data class AlbumModel(
-    val id: String?,
+    val id: String,
     val name: String?,
     val releaseDate: String?,
     val albumType: String?,
-    val images: List<ImageDto>?,
+    val images: List<ImageModel>?,
     val artists: List<ArtistModel>?,
     val tracks: TracksModel?,
     val total_tracks: Int,
@@ -22,7 +20,7 @@ data class ExternalUrlsModel(
 
 data class TrackItemModel(
     val name: String?,
-    val id: String?,
+    val id: String,
     val uri: String?,
     val artists: List<ArtistModel>?,
     val durationMs: Int?,
@@ -39,4 +37,3 @@ data class ArtistModel(
     val id: String?,
     val name: String?
 )
-

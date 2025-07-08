@@ -1,20 +1,15 @@
 package com.example.spoti5.data.repositories
 
-import android.util.Log
 import com.example.spoti5.data.apis.SpotifyApi
-import com.example.spoti5.data.dto.album.NewAlbumsReleaseDto
 import com.example.spoti5.data.result.Result
 import com.example.spoti5.data.result.safeApiCall
-import com.example.spoti5.data.result.toResult
 import com.example.spoti5.di.IoDispatcher
 import com.example.spoti5.domain.model.album.AlbumModel
-import com.example.spoti5.domain.model.album.NewAlbumsReleaseModel
-import com.example.spoti5.domain.model.album.TracksModel
+import com.example.spoti5.domain.model.album.TrackItemModel
 import com.example.spoti5.domain.repository.AlbumsRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
-import kotlin.onSuccess
 
 
 class AlbumsRepositoryImpl @Inject constructor(
@@ -24,18 +19,19 @@ class AlbumsRepositoryImpl @Inject constructor(
     override suspend fun getAlbumById(albumId: String): Result<AlbumModel> {
         return withContext(dispatcher) {
             safeApiCall {
-                api.getAlbumById(albumId)
-                    .toResult{it.toDomainModel()}
+                val response = api.getAlbumById(albumId)
+                Result.Success(response.toDomainModel())
             }
         }
 
     }
 
-    override suspend fun getAlbumTracks(albumId: String): Result<TracksModel> {
+    override suspend fun getAlbumTracks(albumId: String): Result<List<TrackItemModel>> {
         return withContext(dispatcher) {
             safeApiCall {
-                api.getAlbumTracks(albumId)
-                    .toResult { it.toDomainModel() }
+               val response = api.getAlbumTracks(albumId)
+                Result.Success(response.items!!.map { it.toDomainModel()}
+                )
             }
         }
     }
