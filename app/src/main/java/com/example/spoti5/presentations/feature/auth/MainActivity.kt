@@ -49,7 +49,6 @@ class MainActivity : AppCompatActivity() {
 
 
 
-
         Log.e(TAG, "Token: ${SharePrefUtils(this).saveAccessToken}")
         observeDestinationChange()
 
@@ -72,8 +71,19 @@ class MainActivity : AppCompatActivity() {
                     supportActionBar?.hide()
                     binding.bottomNavigationView.visibility = View.GONE
                 }
-                R.id.homeFragment -> {
+                R.id.searchScreenFragment -> {
                     // Show the action bar and bottom navigation when on the home fragment
+                    supportActionBar?.show()
+                    binding.bottomNavigationView.visibility = View.VISIBLE
+                }
+                R.id.libraryScreenFragment -> {
+                    // Show the action bar and bottom navigation when on the library screen fragment
+                    supportActionBar?.show()
+                    binding.bottomNavigationView.visibility = View.VISIBLE
+                }
+
+                R.id.homeScreenFragment ->{
+                    // Show the action bar and bottom navigation when on the home screen fragment
                     supportActionBar?.show()
                     binding.bottomNavigationView.visibility = View.VISIBLE
                 }
@@ -110,7 +120,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun navigateMainFragment() {
         try {
-            navController.navigate(R.id.action_loginFragment_to_homeFragment
+            navController.navigate(R.id.action_loginFragment_to_homeScreenFragment
                 ,null
                 , NavOptions.Builder()
                     .setPopUpTo(R.id.loginFragment, true)
