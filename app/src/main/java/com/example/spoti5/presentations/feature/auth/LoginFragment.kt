@@ -1,30 +1,19 @@
 package com.example.spoti5.presentations.feature.auth
 
-import android.content.ContentValues.TAG
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.fragment.app.viewModels
-import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
-import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.spoti5.BuildConfig
-import com.example.spoti5.presentations.feature.auth.MainActivity
 import com.example.spoti5.base.BaseFragment
 import com.example.spoti5.databinding.FragmentLoginBinding
-import com.example.spoti5.presentations.feature.auth.ViewModel.LoginViewModel
-import com.example.spoti5.presentations.feature.auth.ViewModel.MainUiState
 import com.example.spoti5.utils.SharePrefUtils
-import com.google.firebase.auth.FirebaseAuth
 import com.spotify.android.appremote.api.SpotifyAppRemote
 import com.spotify.sdk.android.auth.AuthorizationClient
 import com.spotify.sdk.android.auth.AuthorizationRequest
 import com.spotify.sdk.android.auth.AuthorizationResponse
-import com.spotify.sdk.android.auth.LoginActivity.REQUEST_CODE
 
 
 /**
@@ -60,27 +49,25 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>() {
 
 
         binding.btnBack.setOnClickListener {
-            fragmentManager?.popBackStack()
-            fragmentManager?.beginTransaction()?.remove(this)?.commit()
+            findNavController().popBackStack()
         }
 
     }
 
     private fun onRequestTokenClicked() {
-//        val builder = AuthorizationRequest.Builder(
-//            BuildConfig.SPOTIFY_CLIENT_ID,
-//            AuthorizationResponse.Type.TOKEN,
-//            BuildConfig.SPOTIFY_REDIRECT_URI
-//        )
-//        builder.setScopes(arrayOf("streaming user-top-read"))
-//        val request = builder.build()
-//        AuthorizationClient.openLoginActivity(requireActivity(), authRequestCode, request)
         val builder = AuthorizationRequest.Builder(
             BuildConfig.SPOTIFY_CLIENT_ID,
             AuthorizationResponse.Type.TOKEN,
             BuildConfig.SPOTIFY_REDIRECT_URI
         )
-        builder.setScopes(arrayOf("streaming", "user-top-read"))
+        builder.setScopes(arrayOf("streaming", "user-top-read",
+            "user-library-read","user-library-modify",
+            "playlist-read-private",
+            "user-read-playback-state",
+            "user-modify-playback-state",
+            "user-read-recently-played",
+            "playlist-modify-private"
+            ))
         val request = builder.build()
 
         AuthorizationClient.openLoginActivity(requireActivity(), authRequestCode, request)
