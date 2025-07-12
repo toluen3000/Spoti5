@@ -1,6 +1,5 @@
 package com.example.spoti5.presentations.feature.auth.ViewModel
 
-import com.example.spoti5.domain.model.UserModel
 
 sealed class MainUiState <out T> {
     object Loading : MainUiState<Nothing>()
