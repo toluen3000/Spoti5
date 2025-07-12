@@ -8,6 +8,9 @@ import com.example.spoti5.domain.model.album.TrackItemModel
 import com.example.spoti5.domain.repository.AlbumsRepository
 import com.example.spoti5.presentations.feature.auth.ViewModel.MainUiState
 import com.example.spoti5.presentations.feature.auth.ViewModel.MainUiState.*
+import com.example.spoti5.presentations.feature.details.UiState.CheckSavedAlbumState
+import com.example.spoti5.presentations.feature.details.UiState.DeleteUiState
+import com.example.spoti5.presentations.feature.details.UiState.SaveUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,6 +23,8 @@ class DetailsViewModel @Inject constructor(
     val albumsRepository: AlbumsRepository
 ) : ViewModel() {
 
+
+    // State: Album
     private val _albumState = MutableStateFlow<MainUiState<AlbumModel>>(
         Loading
     )
@@ -96,5 +101,97 @@ class DetailsViewModel @Inject constructor(
             }
         }
     }
+
+    // State : check if album is saved
+    private val _isAlbumSavedState = MutableStateFlow<CheckSavedAlbumState>(CheckSavedAlbumState.Idle)
+    val isAlbumSavedState: StateFlow<CheckSavedAlbumState> = _isAlbumSavedState.asStateFlow()
+
+    fun checkIfAlbumIsSaved(albumId: String) {
+        viewModelScope.launch {
+            _isAlbumSavedState.value = CheckSavedAlbumState.Loading
+            when (val result = albumsRepository.checkIfAlbumIsSaved(albumId)) {
+                Result.Empty -> {
+                    _isAlbumSavedState.value = CheckSavedAlbumState.Error("No data found")
+                }
+                is Result.Error -> {
+                    _isAlbumSavedState.value = CheckSavedAlbumState.Error(result.message ?: "Unknown error")
+                }
+                is Result.Success -> {
+                    _isAlbumSavedState.value = CheckSavedAlbumState.Success(result.data)
+                }
+            }
+        }
+    }
+
+    fun toggleAlbum(albumId: String) {
+        viewModelScope.launch {
+            val currentState = _isAlbumSavedState.value
+            if (currentState is CheckSavedAlbumState.Success && currentState.isSaved) {
+                deleteAlbumFromUserLib(albumId)
+            } else {
+                saveAlbumToUserLib(albumId)
+            }
+        }
+    }
+
+
+    // State : add album to user library
+    private val _saveAlbumState = MutableStateFlow<SaveUiState>(SaveUiState.Idle)
+    val saveAlbumState: StateFlow<SaveUiState> = _saveAlbumState.asStateFlow()
+
+
+    fun saveAlbumToUserLib(albumId: String){
+
+        viewModelScope.launch {
+            _saveAlbumState.value = SaveUiState.Saving
+
+            when(val result = albumsRepository.saveAlbumToUserLibrary(albumId)){
+                Result.Empty -> {
+                    _saveAlbumState.value = SaveUiState.SaveError("No data found")
+                }
+                is Result.Error -> {
+                    _saveAlbumState.value = SaveUiState.SaveError(result.message ?: "Unknown error")
+                }
+                is Result.Success -> {
+                    if (result.data) {
+                        _isAlbumSavedState.value = CheckSavedAlbumState.Success(true)
+                        _saveAlbumState.value = SaveUiState.Saved
+                    } else {
+                        _saveAlbumState.value = SaveUiState.SaveError("Add album failed")
+                    }
+                }
+            }
+        }
+
+    }
+
+    // State : delete album from user library
+    private val _deleteAlbumState = MutableStateFlow<DeleteUiState>(DeleteUiState.Idle)
+    val deleteAlbumState: StateFlow<DeleteUiState> = _deleteAlbumState.asStateFlow()
+
+    fun deleteAlbumFromUserLib(albumId: String) {
+        viewModelScope.launch {
+            _deleteAlbumState.value = DeleteUiState.Deleting
+
+            when (val result = albumsRepository.deleteAlbumFromUserLibrary(albumId)) {
+                Result.Empty -> {
+                    _deleteAlbumState.value = DeleteUiState.DeleteError("No data found")
+                }
+                is Result.Error -> {
+                    _deleteAlbumState.value = DeleteUiState.DeleteError(result.message ?: "Unknown error")
+                }
+                is Result.Success -> {
+                    if (result.data) {
+                        _isAlbumSavedState.value = CheckSavedAlbumState.Success(false)
+                        _deleteAlbumState.value = DeleteUiState.Deleted
+                    } else {
+                        _deleteAlbumState.value = DeleteUiState.DeleteError("Delete album failed")
+                    }
+                }
+            }
+        }
+    }
+
+
 }
 
