@@ -5,10 +5,13 @@ import android.content.res.Resources
 import android.os.Build
 
 object Constants {
+    const val REQUEST_CODE = 1337
+    const val REDIRECT_URI = "https://open.spotify.com/playlist/"
+
     const val PRIVACY_POLICY =
         "https://amazic.net/Privacy-Policy-270pdf.html"
 
-    const val BASE_URL = ""
+    const val BASE_URL = "https://api.spotify.com/v1/"
 
     object IntentKeys {
         const val SCREEN = "SCREEN"

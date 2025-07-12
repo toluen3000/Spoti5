@@ -97,13 +97,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             albumAdapter.setOnItemClickListener { album ->
 
                 // get album id and move to details screen
-                Toast.makeText(context, "Clicked on: ${album.id}", Toast.LENGTH_SHORT).show()
+                Log.d(TAG, "Album clicked: ${album.name} with ID: ${album.id}")
 
                 //show imgUrl
                 val imageUrl = album.images?.firstOrNull()?.url
                 Log.d(TAG, "Album image URL: ${imageUrl ?: "No image available"}")
                 // Navigate to album details screen
-                val action = HomeFragmentDirections.actionHomeFragmentToDetailsAlbumFragment(album.id,imageUrl)
+                val action = HomeFragmentDirections.actionHomeScreenFragmentToDetailsAlbumFragment(album.id,imageUrl)
                 findNavController().navigate(action)
             }
         }
