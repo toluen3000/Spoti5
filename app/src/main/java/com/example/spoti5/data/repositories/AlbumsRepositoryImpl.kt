@@ -45,7 +45,48 @@ class AlbumsRepositoryImpl @Inject constructor(
         }
     }
 
-        // Successfully fetch new albums release -> json but BaseResponse don't have status TYPE like Success or Error
+    override suspend fun saveAlbumToUserLibrary(albumId: String): Result<Boolean> {
+        return withContext(dispatcher) {
+            safeApiCall {
+                val response = api.saveAlbumToUserLibrary(albumId)
+               if (response.isSuccessful){
+                     Result.Success(true)
+                } else {
+                     Result.Error("Save failed with code ${response.code()}")
+               }
+            }
+        }
+    }
+
+
+    override suspend fun deleteAlbumFromUserLibrary(albumId: String): Result<Boolean> {
+        return withContext(dispatcher){
+            safeApiCall {
+                val response = api.deleteAlbumFromUserLibrary(albumId)
+                if (response.isSuccessful) {
+                    Result.Success(true)
+                } else {
+                    Result.Error("Delete failed with code ${response.code()}")
+                }
+            }
+        }
+    }
+
+    override suspend fun checkIfAlbumIsSaved(albumId: String): Result<Boolean> {
+        return withContext(dispatcher) {
+            safeApiCall {
+                val response = api.getUserSavedAlbums()
+                if (response.items!!.any { it.album?.id == albumId }) {
+                    Result.Success(true)
+                } else {
+                    Result.Success(false)
+                }
+            }
+        }
+    }
+
+
+    // Successfully fetch new albums release -> json but BaseResponse don't have status TYPE like Success or Error
 
 //    override suspend fun getNewAlbumsRelease(): Result<NewAlbumsReleaseModel> {
 //        return withContext(dispatcher) {

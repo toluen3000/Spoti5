@@ -4,11 +4,14 @@ import com.example.spoti5.data.dto.UserDto
 import com.example.spoti5.data.dto.album.AlbumDto
 import com.example.spoti5.data.dto.album.NewAlbumsReleaseDto
 import com.example.spoti5.data.dto.album.TracksDto
-import com.example.spoti5.data.dto.library.SavedAlbumItemDto
 import com.example.spoti5.data.dto.library.UserSavedAlbumDto
 import com.example.spoti5.data.result.BaseResponse
+import retrofit2.Response
+import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.PUT
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface SpotifyApi {
 
@@ -41,10 +44,19 @@ interface SpotifyApi {
     ): NewAlbumsReleaseDto
 
     // user saved albums
-
-
     @GET("me/albums")
     suspend fun getUserSavedAlbums(
     ): UserSavedAlbumDto
+
+    @PUT("me/albums")
+    suspend fun saveAlbumToUserLibrary(
+        @Query("ids") albumIds: String
+    ): Response<Unit>
+
+    @DELETE("me/albums")
+    suspend fun deleteAlbumFromUserLibrary(
+        @Query("ids") albumIds: String
+    ): Response<Unit>
+
 
 }

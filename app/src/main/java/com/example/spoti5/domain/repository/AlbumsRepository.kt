@@ -17,4 +17,10 @@ interface AlbumsRepository {
     suspend fun getNewAlbumsRelease(): Result<List<AlbumModel>>
 
 //    suspend fun getNewAlbumsRelease(): Result<List<AlbumsModel>>
+
+    suspend fun saveAlbumToUserLibrary(albumId: String): Result<Boolean>
+
+    suspend fun deleteAlbumFromUserLibrary(albumId: String): Result<Boolean>
+
+    suspend fun checkIfAlbumIsSaved(albumId: String): Result<Boolean>
 }
