@@ -75,24 +75,6 @@
 
         </androidx.viewpager2.widget.ViewPager2>
 
-        <ScrollView
-            android:id="@+id/scrollView"
-            app:layout_constraintTop_toBottomOf="@id/tabLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <androidx.recyclerview.widget.RecyclerView
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                android:id="@+id/rvAlbums"
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:listitem="@layout/item_library_recyl"
-                />
-
-        </ScrollView>
-
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

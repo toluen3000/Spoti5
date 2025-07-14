@@ -66,6 +66,9 @@
         <action
             android:id="@+id/action_libraryScreenFragment_to_homeScreenFragment"
             app:destination="@id/homeScreenFragment" />
+        <action
+            android:id="@+id/action_libraryScreenFragment_to_detailsAlbumFragment"
+            app:destination="@id/detailsAlbumFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchScreenFragment"
