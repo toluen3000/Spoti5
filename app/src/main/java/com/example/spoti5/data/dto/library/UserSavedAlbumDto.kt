@@ -20,12 +20,12 @@ data class  SavedAlbumItemDto(
     @SerializedName("added_at")
     val addedAt: String?,
     @SerializedName("album")
-    val album: AlbumDto?
+    val album: AlbumDto
 ){
     fun toDomainModel(): SavedAlbumItemModel {
         return SavedAlbumItemModel(
             addedAt = addedAt,
-            album = album
+            album = album.toDomainModel()
         )
     }
 }
