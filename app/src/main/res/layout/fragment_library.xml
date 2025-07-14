@@ -42,6 +42,8 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.tabs.TabLayout
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -49,10 +51,13 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tabIndicator="@drawable/tab_indicator"
+            app:tabGravity="center"
+            app:tabRippleColor="@null"
+            android:background="@drawable/tab_indicator"
             app:tabIndicatorAnimationMode="elastic"
-            app:tabIndicatorColor="#4CAF50"
-            app:tabIndicatorGravity="stretch"
+            app:tabBackground="@drawable/tab_selected_bg"
+            app:tabIndicatorGravity="center"
+            app:tabIndicatorHeight="0dp"
             app:tabMode="fixed">
 
 
@@ -61,7 +66,7 @@
 
 
         <androidx.viewpager2.widget.ViewPager2
-            android:visibility="gone"
+            android:visibility="visible"
             android:id="@+id/viewPager2"
             android:layout_marginTop="100dp"
             android:layout_width="match_parent"
@@ -77,9 +82,13 @@
             android:layout_height="wrap_content">
 
             <androidx.recyclerview.widget.RecyclerView
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 android:id="@+id/rvAlbums"
+                android:visibility="gone"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                tools:listitem="@layout/item_library_recyl"
+                />
 
         </ScrollView>
 
