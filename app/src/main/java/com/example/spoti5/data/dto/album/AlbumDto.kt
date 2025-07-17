@@ -105,7 +105,7 @@ data class ArtistDto(
 ){
     fun toDomainModel(): ArtistModel {
         return ArtistModel(
-            id = id,
+            id = id ?: "Unknown",
             name = name
         )
     }
