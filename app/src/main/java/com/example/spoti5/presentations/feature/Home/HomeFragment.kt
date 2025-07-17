@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide
 import com.example.spoti5.base.BaseFragment
 import com.example.spoti5.databinding.FragmentHomeBinding
 import com.example.spoti5.presentations.feature.Home.adapter.AlbumAdapter
+import com.example.spoti5.presentations.feature.Home.adapter.ArtistAdapter
 import com.example.spoti5.presentations.feature.auth.ViewModel.MainUiState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -25,6 +26,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
     private val viewModel: HomeViewModel by viewModels()
     private lateinit var albumAdapter: AlbumAdapter
+
+    private lateinit var artistAdapter: ArtistAdapter
 
 
     override fun inflateBinding(
@@ -39,8 +42,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
         setUpRecyclerView()
 
+        setUpArtistRecycleView()
+
         viewModel.fetchUserInfo()
         viewModel.fetchNewAlbums()
+        viewModel.fetchArtistsFromNewAlbumsRelease()
+
+        // observe artist
+        observeArtist()
 
 
 
@@ -86,6 +95,40 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    private fun observeArtist() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModel.artistState.collect { state ->
+                    when (state) {
+                        is MainUiState.Error -> {
+                            Log.d(TAG,"Error fetching Artist : ${state.message}")
+                        }
+                        MainUiState.Loading -> {
+                            Log.d(TAG, "Loading Artist...")
+                        }
+                        is MainUiState.Success-> {
+                            Log.d(TAG, "Fetched ${state.data.size} Artist")
+                            artistAdapter.submitList(state.data)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun setUpArtistRecycleView() = with(binding) {
+        binding.rvArtists.apply {
+            artistAdapter = ArtistAdapter()
+            adapter = artistAdapter
+
+            artistAdapter.setOnItemClickListener { artist ->
+                // get artist id when click
+                Log.d(TAG, "Artist clicked: ${artist.name} with ID: ${artist.id}")
+
             }
         }
     }

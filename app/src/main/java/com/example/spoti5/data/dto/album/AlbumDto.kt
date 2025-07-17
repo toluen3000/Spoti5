@@ -101,12 +101,13 @@ data class ArtistDto(
     @SerializedName("id")
     val id: String?,
     @SerializedName("name")
-    val name: String?
+    val name: String?,
 ){
     fun toDomainModel(): ArtistModel {
         return ArtistModel(
             id = id ?: "Unknown",
-            name = name
+            name = name,
+            imageUrl = null
         )
     }
 }

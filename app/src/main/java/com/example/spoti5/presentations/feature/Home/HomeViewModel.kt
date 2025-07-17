@@ -1,5 +1,6 @@
 package com.example.spoti5.presentations.feature.Home
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.spoti5.domain.model.UserModel
@@ -14,13 +15,17 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import com.example.spoti5.data.result.Result
+import com.example.spoti5.domain.model.album.ArtistModel
 import com.example.spoti5.domain.model.album.NewAlbumsReleaseModel
+import com.example.spoti5.domain.model.artist.ArtistDetailModel
+import com.example.spoti5.domain.repository.ArtistDetailRepository
 import com.example.spoti5.presentations.feature.auth.ViewModel.MainUiState.*
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val repository: SpotifyRepository,
-    private val albumRepository: AlbumsRepository
+    private val albumRepository: AlbumsRepository,
+    private val artistRepository: ArtistDetailRepository
 ) : ViewModel() {
 
     // StateFlow to hold the user state
@@ -90,6 +95,37 @@ class HomeViewModel @Inject constructor(
                 }
                 Result.Empty -> {
                     _albumsState.value = Error("No albums found")
+                }
+            }
+        }
+    }
+
+
+    // show artist in home screen
+
+    private val _artistState = MutableStateFlow<MainUiState<List<ArtistModel>>>(
+        MainUiState.Loading
+    )
+    val artistState: StateFlow<MainUiState<List<ArtistModel>>> = _artistState.asStateFlow()
+
+    fun fetchArtistsFromNewAlbumsRelease() {
+        viewModelScope.launch {
+            _artistState.value = MainUiState.Loading
+            when (val result = albumRepository.getNewAlbumsRelease()){
+                Result.Empty -> {
+                    _artistState.value = Error("No artist found")
+                }
+                is Result.Error -> {
+                    _albumsState.value = Error(result.message ?: "An error occurred")
+                }
+                is Result.Success -> {
+                    _artistState.value = Success(result.data.map { album ->
+                        ArtistModel(
+                            id = album.artists?.firstOrNull()?.id ?: "",
+                            name = album.artists?.firstOrNull()?.name,
+                            imageUrl = album.images?.firstOrNull()?.url
+                        )
+                    })
                 }
             }
         }

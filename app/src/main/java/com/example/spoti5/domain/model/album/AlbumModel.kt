@@ -35,5 +35,7 @@ data class TracksModel(
 
 data class ArtistModel(
     val id: String,
-    val name: String?
+    val name: String?,
+    val imageUrl: String?
+
 )
