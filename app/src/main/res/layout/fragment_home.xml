@@ -25,8 +25,9 @@
                 android:layout_gravity="center"
                 android:orientation="horizontal">
 
-                <ImageView
+                <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/imgUserAvatar"
+                    app:shapeAppearanceOverlay="@style/rounded_bg"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginStart="16dp"
@@ -61,12 +62,33 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvAlbums"
+                android:layout_marginStart="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                app:spanCount="2"
-                tools:listitem="Album item" />
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:spanCount="1"
+                android:orientation="horizontal"
+                tools:listitem="@layout/item_album_recyl" />
+
+            <TextView
+                android:id="@+id/txtArtist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:text="Artists"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvArtists"
+                android:layout_marginStart="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:spanCount="1"
+                android:orientation="horizontal"
+                tools:listitem="@layout/item_artist_recyl" />
 
         </LinearLayout>
 
