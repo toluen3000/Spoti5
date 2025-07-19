@@ -41,6 +41,9 @@
         <action
             android:id="@+id/action_homeScreenFragment_to_searchScreenFragment"
             app:destination="@id/searchScreenFragment" />
+        <action
+            android:id="@+id/action_homeScreenFragment_to_artistDetailFragment"
+            app:destination="@id/artistDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/detailsAlbumFragment"
@@ -69,6 +72,9 @@
         <action
             android:id="@+id/action_libraryScreenFragment_to_detailsAlbumFragment"
             app:destination="@id/detailsAlbumFragment" />
+        <action
+            android:id="@+id/action_libraryScreenFragment_to_artistDetailFragment"
+            app:destination="@id/artistDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchScreenFragment"
@@ -78,5 +84,26 @@
         <action
             android:id="@+id/action_searchScreenFragment_to_homeScreenFragment"
             app:destination="@id/homeScreenFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/artistDetailFragment"
+        android:name="com.example.spoti5.presentations.feature.artist.ArtistDetailFragment"
+        android:label="fragment_artist_detail"
+        tools:layout="@layout/fragment_artist_detail" >
+        <action
+            android:id="@+id/action_artistDetailFragment_to_homeScreenFragment"
+            app:destination="@id/homeScreenFragment" />
+        <action
+            android:id="@+id/action_artistDetailFragment_to_libraryScreenFragment"
+            app:destination="@id/libraryScreenFragment" />
+        <argument
+            android:name="artistId"
+            app:argType="string" />
+        <argument android:name="imgUrl"
+            app:argType="string"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_artistDetailFragment_self"
+            app:destination="@id/artistDetailFragment" />
     </fragment>
 </navigation>
