@@ -21,8 +21,6 @@ data class ArtistDetailModel(
 data class FollowersModel(
 
     val href: String?, //This will always be set to null, as the Web API does not support it at the moment.
-
-
     val total: Int?
 )
 
