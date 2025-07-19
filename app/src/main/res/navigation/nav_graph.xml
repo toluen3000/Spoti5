@@ -60,6 +60,9 @@
             android:name="imageUrl"
             app:argType="string"
             app:nullable="true" />
+        <action
+            android:id="@+id/action_detailsAlbumFragment_to_artistDetailFragment"
+            app:destination="@id/artistDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/libraryScreenFragment"
@@ -105,5 +108,8 @@
         <action
             android:id="@+id/action_artistDetailFragment_self"
             app:destination="@id/artistDetailFragment" />
+        <action
+            android:id="@+id/action_artistDetailFragment_to_detailsAlbumFragment"
+            app:destination="@id/detailsAlbumFragment" />
     </fragment>
 </navigation>
