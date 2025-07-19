@@ -128,7 +128,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             artistAdapter.setOnItemClickListener { artist ->
                 // get artist id when click
                 Log.d(TAG, "Artist clicked: ${artist.name} with ID: ${artist.id}")
-
+                val action = HomeFragmentDirections.actionHomeScreenFragmentToArtistDetailFragment(artistId = artist.id,
+                    artist.imageUrl)
+                findNavController().navigate(action)
             }
         }
     }

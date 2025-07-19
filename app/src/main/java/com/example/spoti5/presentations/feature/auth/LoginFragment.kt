@@ -66,7 +66,8 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>() {
             "user-read-playback-state",
             "user-modify-playback-state",
             "user-read-recently-played",
-            "playlist-modify-private"
+            "playlist-modify-private",
+            "user-read-private"
             ))
         val request = builder.build()
 

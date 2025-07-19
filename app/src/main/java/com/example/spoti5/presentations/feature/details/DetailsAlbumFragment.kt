@@ -218,12 +218,6 @@ class DetailsAlbumFragment : BaseFragment<FragmentDetailsAlbumBinding>() {
                             trackAdapter.submitList(state.data)
                             binding.rvTracks.adapter = trackAdapter
 
-
-                            // Set up click listener for each track item
-                            trackAdapter.setOnItemClickListener { track ->
-                                 Log.d("DetailsAlbumFragment", "Track clicked: ${track.name}")
-                                 Toast.makeText(context, "Clicked on: ${track.name}", Toast.LENGTH_SHORT).show()
-                            }
                        }
                    }
                }
