@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide
 import com.example.spoti5.R
 import com.example.spoti5.base.BaseFragment
 import com.example.spoti5.databinding.FragmentDetailsAlbumBinding
+import com.example.spoti5.presentations.feature.artist.ArtistDetailFragmentDirections
 import com.example.spoti5.presentations.feature.auth.ViewModel.MainUiState
 import com.example.spoti5.presentations.feature.details.UiState.CheckSavedAlbumState
 import com.example.spoti5.presentations.feature.details.UiState.DeleteUiState
@@ -273,6 +274,13 @@ class DetailsAlbumFragment : BaseFragment<FragmentDetailsAlbumBinding>() {
             adapter = trackAdapter
             trackAdapter.setOnItemClickListener { track ->
                 Log.d("DetailsAlbumFragment", "Track clicked: ${track.name}")
+                Log.d("DetailsAlbumFragment", "Track clicked: ${track.uri}")
+                // navigate to playback
+                val action = DetailsAlbumFragmentDirections.actionDetailsAlbumFragmentToPlayMusicFragment(
+                    track.uri ?: "",
+                    track.id,
+                )
+                findNavController().navigate(action)
                 Toast.makeText(context, "Clicked on: ${track.name}", Toast.LENGTH_SHORT).show()
             }
         }

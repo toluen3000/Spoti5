@@ -16,13 +16,10 @@ import com.bumptech.glide.Glide
 import com.example.spoti5.base.BaseFragment
 import com.example.spoti5.databinding.FragmentArtistDetailBinding
 import com.example.spoti5.presentations.feature.Home.adapter.AlbumAdapter
-import com.example.spoti5.presentations.feature.Home.adapter.ArtistAdapter
 import com.example.spoti5.presentations.feature.artist.UiState.ArtistUiState
 import com.example.spoti5.presentations.feature.artist.ViewModel.ArtistDetailViewModel
 import com.example.spoti5.presentations.feature.artist.adapter.ArtistDetailAdapter
 import com.example.spoti5.presentations.feature.artist.adapter.SeveralArtistAdapter
-import com.example.spoti5.presentations.feature.details.DetailsAlbumFragmentArgs
-import com.example.spoti5.presentations.feature.details.adapter.DetailsAlbumAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlin.getValue
@@ -177,6 +174,15 @@ class ArtistDetailFragment : BaseFragment<FragmentArtistDetailBinding>() {
             adapter = trackAdapter
             trackAdapter.setOnItemClickListener { track ->
                 Log.d(TAG, "Track clicked: ${track.name}")
+                Log.d(TAG, "Track Uri: ${track.uri}")
+
+                // navigate to playback
+                val action = ArtistDetailFragmentDirections.actionArtistDetailFragmentToPlayMusicFragment(
+                    track.uri ?: "",
+                    track.id,
+                )
+                findNavController().navigate(action)
+
                 Toast.makeText(context, "Clicked on: ${track.name}", Toast.LENGTH_SHORT).show()
             }
         }
