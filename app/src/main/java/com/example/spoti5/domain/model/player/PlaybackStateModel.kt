@@ -1,6 +1,4 @@
-package com.example.spoti5.domain.player
-
-import com.google.gson.annotations.SerializedName
+package com.example.spoti5.domain.model.player
 
 data class PlaybackStateModel(
     val device: DeviceModel?,

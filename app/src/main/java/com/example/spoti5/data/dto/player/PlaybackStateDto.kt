@@ -1,10 +1,15 @@
-import com.example.spoti5.domain.player.AlbumModel
-import com.example.spoti5.domain.player.ArtistModel
-import com.example.spoti5.domain.player.ContextModel
-import com.example.spoti5.domain.player.DeviceModel
-import com.example.spoti5.domain.player.ExternalUrlsModel
-import com.example.spoti5.domain.player.PlaybackStateModel
-import com.example.spoti5.domain.player.TrackItemModel
+import com.example.spoti5.domain.model.player.ActionsModel
+import com.example.spoti5.domain.model.player.AlbumModel
+import com.example.spoti5.domain.model.player.ArtistModel
+import com.example.spoti5.domain.model.player.ContextModel
+import com.example.spoti5.domain.model.player.DeviceModel
+import com.example.spoti5.domain.model.player.ExternalIdsModel
+import com.example.spoti5.domain.model.player.ExternalUrlsModel
+import com.example.spoti5.domain.model.player.ImageModel
+import com.example.spoti5.domain.model.player.LinkedFromModel
+import com.example.spoti5.domain.model.player.PlaybackStateModel
+import com.example.spoti5.domain.model.player.RestrictionsModel
+import com.example.spoti5.domain.model.player.TrackItemModel
 import com.google.gson.annotations.SerializedName
 
 data class PlaybackStateDto(
@@ -325,8 +330,8 @@ data class ImageDto(
     @SerializedName("width")
     val width: Int?
 ){
-    fun toDomainModel(): com.example.spoti5.domain.player.ImageModel {
-        return com.example.spoti5.domain.player.ImageModel(
+    fun toDomainModel(): ImageModel {
+        return ImageModel(
             url = url ?: "Unknown",
             height = height ?: 0,
             width = width ?: 0
@@ -339,8 +344,8 @@ data class RestrictionsDto(
     @SerializedName("reason")
     val reason: String?
 ){
-    fun toDomainModel(): com.example.spoti5.domain.player.RestrictionsModel {
-        return com.example.spoti5.domain.player.RestrictionsModel(
+    fun toDomainModel(): RestrictionsModel {
+        return RestrictionsModel(
             reason = reason ?: "Unknown"
         )
     }
@@ -363,8 +368,8 @@ data class LinkedFromDto(
     @SerializedName("uri")
     val uri: String?
 ){
-    fun toDomainModel(): com.example.spoti5.domain.player.LinkedFromModel {
-        return com.example.spoti5.domain.player.LinkedFromModel(
+    fun toDomainModel(): LinkedFromModel {
+        return LinkedFromModel(
             externalUrls = externalUrls?.toDomainModel(),
             href = href ?: "Unknown",
             id = id ?: "Unknown",
@@ -385,8 +390,8 @@ data class ExternalIdsDto(
     @SerializedName("upc")
     val upc: String?
 ){
-    fun toDomainModel(): com.example.spoti5.domain.player.ExternalIdsModel {
-        return com.example.spoti5.domain.player.ExternalIdsModel(
+    fun toDomainModel(): ExternalIdsModel {
+        return ExternalIdsModel(
             isrc = isrc ?: "Unknown",
             ean = ean ?: "Unknown",
             upc = upc ?: "Unknown"
@@ -426,8 +431,8 @@ data class ActionsDto(
     @SerializedName("transferring_playback")
     val transferringPlayback: Boolean?
 ){
-    fun toDomainModel(): com.example.spoti5.domain.player.ActionsModel {
-        return com.example.spoti5.domain.player.ActionsModel(
+    fun toDomainModel(): ActionsModel {
+        return ActionsModel(
             interruptingPlayback = interruptingPlayback ?: false,
             pausing = pausing ?: false,
             resuming = resuming ?: false,
