@@ -63,6 +63,9 @@
         <action
             android:id="@+id/action_detailsAlbumFragment_to_artistDetailFragment"
             app:destination="@id/artistDetailFragment" />
+        <action
+            android:id="@+id/action_detailsAlbumFragment_to_playMusicFragment"
+            app:destination="@id/playMusicFragment" />
     </fragment>
     <fragment
         android:id="@+id/libraryScreenFragment"
@@ -78,6 +81,9 @@
         <action
             android:id="@+id/action_libraryScreenFragment_to_artistDetailFragment"
             app:destination="@id/artistDetailFragment" />
+        <action
+            android:id="@+id/action_libraryScreenFragment_to_playMusicFragment"
+            app:destination="@id/playMusicFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchScreenFragment"
@@ -111,5 +117,42 @@
         <action
             android:id="@+id/action_artistDetailFragment_to_detailsAlbumFragment"
             app:destination="@id/detailsAlbumFragment" />
+        <action
+            android:id="@+id/action_artistDetailFragment_to_playMusicFragment"
+            app:destination="@id/playMusicFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/playMusicFragment"
+        android:name="com.example.spoti5.presentations.feature.play.PlayMusicFragment"
+        android:label="fragment_play_music"
+        tools:layout="@layout/fragment_play_music" >
+        <action
+            android:id="@+id/action_playMusicFragment_to_artistDetailFragment"
+            app:destination="@id/artistDetailFragment" />
+        <action
+            android:id="@+id/action_playMusicFragment_to_detailsAlbumFragment"
+            app:destination="@id/detailsAlbumFragment" />
+        <argument
+            android:name="uri"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="idTrack"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_playMusicFragment_to_libraryScreenFragment"
+            app:destination="@id/libraryScreenFragment" />
+        <action
+            android:id="@+id/action_playMusicFragment_to_trackLibraryFragment"
+            app:destination="@id/trackLibraryFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/trackLibraryFragment"
+        android:name="com.example.spoti5.presentations.feature.library.fragviewpager2.TrackLibraryFragment"
+        android:label="fragment_track_library"
+        tools:layout="@layout/fragment_track_library" >
+        <action
+            android:id="@+id/action_trackLibraryFragment_to_playMusicFragment"
+            app:destination="@id/playMusicFragment" />
     </fragment>
 </navigation>

@@ -19,6 +19,7 @@
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_marginTop="10dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:layout_width="match_parent"
@@ -80,13 +81,19 @@
             android:layout_height="wrap_content">
 
             <TextView
+                android:maxLines="1"
+                android:ellipsize="marquee"
+                android:singleLine="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:scrollHorizontally="true"
                 android:textColor="@color/black"
                 android:id="@+id/txtTitle"
-                android:layout_width="wrap_content"
+                android:layout_width="280dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="16dp"
-                android:text="Title of the Track"
                 android:textSize="20sp"
                 android:fontFamily="@font/poppins_bold"
                 app:layout_constraintStart_toStartOf="parent"
@@ -94,10 +101,10 @@
 
             <TextView
                 android:id="@+id/txtArtist"
-                android:layout_width="wrap_content"
+                android:layout_width="280dp"
+                android:maxLines="1"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
-                android:text="Artist Name"
                 android:layout_marginTop="-8dp"
                 android:fontFamily="@font/poppins_medium"
                 app:layout_constraintStart_toStartOf="parent"
@@ -248,7 +255,7 @@
             <TextView
                 android:id="@+id/txtLyrics"
                 android:background="@drawable/rounded_bg"
-                android:layout_marginBottom="40dp"
+                android:layout_marginBottom="60dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_width="match_parent"

@@ -49,14 +49,18 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/playMusicDialog"
-        android:visibility="gone"
+        android:visibility="visible"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/overlay_round_bg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
+            app:shapeAppearanceOverlay="@style/corner_small_bg"
             android:id="@+id/imgTrack"
             android:layout_width="60dp"
             android:layout_height="60dp"
@@ -68,7 +72,7 @@
 
         <TextView
             android:id="@+id/txtTitle"
-            android:layout_width="230dp"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
