@@ -6,7 +6,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.spoti5.presentations.feature.library.fragviewpager2.AlbumLibraryFragment
 import com.example.spoti5.presentations.feature.library.fragviewpager2.ArtistLibraryFragment
-import com.example.spoti5.presentations.feature.library.fragviewpager2.PostcastLibraryFragment
+import com.example.spoti5.presentations.feature.library.fragviewpager2.TrackLibraryFragment
 
 class ViewPager2Adapter(
     fragment: Fragment
@@ -19,7 +19,7 @@ class ViewPager2Adapter(
         } else if (position == 1) {
             return ArtistLibraryFragment()
         } else {
-            return PostcastLibraryFragment()
+            return TrackLibraryFragment()
         }
     }
 
