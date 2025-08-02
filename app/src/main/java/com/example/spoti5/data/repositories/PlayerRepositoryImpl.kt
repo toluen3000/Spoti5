@@ -23,6 +23,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 
 class PlayerRepositoryImpl @Inject constructor(
@@ -115,6 +117,23 @@ class PlayerRepositoryImpl @Inject constructor(
         spotifyAppRemote?.playerApi?.pause()
     }
 
+    override suspend fun resume() {
+        spotifyAppRemote?.playerApi?.resume()
+    }
+
+    override suspend fun resumePlayback(deviceId: String): Result<Boolean> {
+        return withContext(ioDispatcher) {
+            safeApiCall {
+                val response = api.resumePlayback()
+                if (response.isSuccessful) {
+                    Result.Success(true)
+                } else {
+                    Result.Error("Resume playback failed with code ${response.code()}")
+                }
+            }
+        }
+    }
+
     override suspend fun skipNext() {
         spotifyAppRemote?.playerApi?.skipNext()
     }
@@ -144,7 +163,7 @@ class PlayerRepositoryImpl @Inject constructor(
         return withContext(ioDispatcher){
             safeApiCall {
                 val response = api.getAvailableDevices()
-                Result.Success(response.map { it.toDomainModel() } )
+                Result.Success(response.devices.map { it.toDomainModel() } )
             }
         }
     }

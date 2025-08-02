@@ -19,6 +19,10 @@ interface PlayerRepository {
 
     suspend fun pause()
 
+    suspend fun resume()
+
+    suspend fun resumePlayback( deviceId: String ):Result<Boolean>
+
     suspend fun skipNext()
 
     suspend fun skipPrevious()
