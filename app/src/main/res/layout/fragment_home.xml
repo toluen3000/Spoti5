@@ -54,7 +54,7 @@
                 android:id="@+id/tvTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
+                android:layout_marginStart="16dp"
                 android:text="New Albums"
                 android:textSize="22sp"
                 android:textStyle="bold" />
@@ -74,7 +74,8 @@
                 android:id="@+id/txtArtist"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
+                android:layout_marginStart="16dp"
+
                 android:text="Artists"
                 android:textSize="22sp"
                 android:textStyle="bold" />
