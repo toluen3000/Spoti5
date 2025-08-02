@@ -3,6 +3,8 @@ package com.example.spoti5.presentations.feature.auth
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import androidx.activity.enableEdgeToEdge
@@ -12,6 +14,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
@@ -22,6 +25,7 @@ import com.example.spoti5.constants.Constants.REQUEST_CODE
 import com.example.spoti5.databinding.ActivityMainBinding
 import com.example.spoti5.domain.model.player.utils.PlaybackState
 import com.example.spoti5.presentations.feature.play.PlayMusicViewModel
+import com.example.spoti5.presentations.feature.play.UiState.ItemUiState
 import com.example.spoti5.presentations.feature.play.UiState.PlayerUiState
 import com.example.spoti5.utils.SharePrefUtils
 import com.spotify.android.appremote.api.ConnectionParams
@@ -29,6 +33,7 @@ import com.spotify.android.appremote.api.SpotifyAppRemote
 import com.spotify.sdk.android.auth.AuthorizationClient
 import com.spotify.sdk.android.auth.AuthorizationResponse
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -59,6 +64,9 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+
+    private var currentDestinationId: Int? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -66,7 +74,8 @@ class MainActivity : AppCompatActivity() {
         installSplashScreen()
 
         setContentView(binding.root)
-        
+
+
 
         // Define navHostFragment to navController to manage the screens
         val navHostFragment =
@@ -75,26 +84,89 @@ class MainActivity : AppCompatActivity() {
 
         binding.bottomNavigationView.setupWithNavController(navController)
 
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            currentDestinationId = destination.id
+            checkMiniPlayerState(viewModel.playbackState.value)
+        }
 
 
 
         observeDestinationChange()
 
         // Observe Player State
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.playbackState.collect { state ->
-                    when (state) {
-                        is PlayerUiState.Success -> bindMiniPlayer(state.data)
-                        else -> hideMiniPlayer()
-                    }
-                }
-            }
-        }
+        observePlayerState()
+        observeSeekbar()
+        // Observe devices
+        viewModel.fetchAvailableDevices()
+        observeDevices()
+
 
         setupMiniPlayerControls()
 
     }
+
+    private fun observeSeekbar() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.playbackState.collect { state ->
+                    if (state is PlayerUiState.Success) {
+                        binding.seekBar.progress = state.data.positionMs.toInt()
+                        binding.seekBar.max = state.data.durationMs.toInt()
+                    }
+                }
+            }
+        }
+    }
+
+
+    private fun observeDevices() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.inforPlaybackState.collect { state ->
+                    when (state) {
+                        is ItemUiState.Success -> {
+                            Log.d(TAG, "Devices: ${state.data}")
+                            Log.d(TAG, "First Device: ${state.data.firstOrNull()?.name}")
+                        }
+                        is ItemUiState.Error -> {
+                            Log.e(TAG, "Error fetching devices: ${state.message}")
+                        }
+                        is ItemUiState.Loading -> {
+                            Log.d(TAG, "Loading devices...")
+                        }
+
+                        ItemUiState.Empty -> {
+                            Log.d(TAG, "No devices found")
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun observePlayerState() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.playbackState.collect { state ->
+                    checkMiniPlayerState(state)
+                }
+            }
+        }
+    }
+
+    private fun checkMiniPlayerState(state: PlayerUiState) {
+        if (state is PlayerUiState.Success) {
+            if (currentDestinationId == R.id.playMusicFragment || currentDestinationId == R.id.loginFragment) {
+                hideMiniPlayer()
+            } else {
+                bindMiniPlayer(state.data)
+            }
+        } else {
+            hideMiniPlayer() //  Idle/Error
+        }
+    }
+
+
 
     private fun hideMiniPlayer() {
         binding.playMusicDialog.visibility = View.GONE
@@ -104,9 +176,24 @@ class MainActivity : AppCompatActivity() {
 
         binding.playMusicDialog.visibility = View.GONE
 
+        binding.btnPlay.setOnClickListener {
+            val currentState = viewModel.playbackState.value
+            if (currentState is PlayerUiState.Success) {
+                if (currentState.data.isPlaying ) {
+                    viewModel.pause()
+                    setPlayIcon()
+                } else {
+                    viewModel.resume()
+                    binding.btnPlay.setImageResource(R.drawable.ic_pause)
+                }
+            } else {
+                Log.e(TAG, "Playback state is not available or not playing")
+            }
+        }
 
         // open in PlayMusicFragment
         binding.playMusicDialog.setOnClickListener {
+
 
             val trackUri = (viewModel.playbackState.value as? PlayerUiState.Success)?.data?.trackUri
             val idTrack = trackUri?.split(":")?.lastOrNull() ?: ""
@@ -115,7 +202,6 @@ class MainActivity : AppCompatActivity() {
                 putString("idTrack",idTrack)
             }
 
-            binding.playMusicDialog.visibility = View.GONE
 
             navController.navigate(
                 R.id.playMusicFragment,
@@ -132,15 +218,19 @@ class MainActivity : AppCompatActivity() {
 
     private fun bindMiniPlayer(state: PlaybackState) {
 
-        if (!state.isPlaying) {
-            hideMiniPlayer()
-            return
-        }
 
         binding.playMusicDialog.apply {
             visibility = View.VISIBLE
             binding.txtTitle.text = state.trackName
             binding.txtArtist.text = state.artistName
+            binding.seekBar.progress = state.positionMs.toInt()
+            binding.seekBar.max = state.durationMs.toInt().coerceAtLeast(1)
+
+            if (state.isPlaying){
+                binding.btnPlay.setImageResource(R.drawable.ic_pause)
+            } else {
+                setPlayIcon()
+            }
 
             Glide.with(this@MainActivity)
                 .load(state.albumImageUrl)
@@ -148,6 +238,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun setPlayIcon() {
+        binding.btnPlay.setImageResource(R.drawable.ic_play_button)
+    }
 
 
     override fun onSupportNavigateUp(): Boolean {

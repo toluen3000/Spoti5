@@ -1,9 +1,10 @@
 package com.example.spoti5.presentations.feature.play
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.spoti5.data.result.Result
-import com.example.spoti5.domain.model.player.PlaybackStateModel
+import com.example.spoti5.domain.model.player.DeviceModel
 import com.example.spoti5.domain.model.track.TrackModel
 import com.example.spoti5.domain.repository.ExoplayerRepository
 import com.example.spoti5.domain.repository.PlayerRepository
@@ -11,9 +12,11 @@ import com.example.spoti5.domain.repository.TrackRepository
 import com.example.spoti5.presentations.feature.play.UiState.ItemUiState
 import com.example.spoti5.presentations.feature.play.UiState.PlayerUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,10 +29,7 @@ class PlayMusicViewModel @Inject constructor(
 
 
     //---------------------------------------------------------------------------------------
-    // Playback state for the current track (Spotify web api ) // not using ExoPlayer for Spotify tracks
-    private val _playbackState = MutableStateFlow<PlayerUiState>(PlayerUiState.Idle)
-    val playbackState: StateFlow<PlayerUiState> = _playbackState.asStateFlow()
-
+    // Playback state for the current track (Spotify SDK ) // not using ExoPlayer for Spotify tracks
 
     fun connectSpotify() {
         viewModelScope.launch {
@@ -60,6 +60,48 @@ class PlayMusicViewModel @Inject constructor(
             playerRepository.skipNext()
         }
     }
+
+    fun resume(useSdk: Boolean = true) {
+        viewModelScope.launch {
+            if (useSdk) {
+                playerRepository.resume()
+            } else {
+
+                val result = playerRepository.resumePlayback("id")
+                Log.d("ViewModel", "Resume via API: $result")
+            }
+        }
+    }
+
+    //---------------------------------------------------------------------------------------
+    // Using Web API for playback state
+
+    private val _playbackState = MutableStateFlow<PlayerUiState>(PlayerUiState.Idle)
+    val playbackState: StateFlow<PlayerUiState> = _playbackState.asStateFlow()
+
+    // Fetch infor
+
+    private val _inforPlaybackState = MutableStateFlow<ItemUiState<List<DeviceModel>>>(ItemUiState.Loading)
+    val inforPlaybackState: StateFlow<ItemUiState<List<DeviceModel>>> = _inforPlaybackState.asStateFlow()
+
+    // Call Web API to get devices,
+    fun fetchAvailableDevices() {
+        viewModelScope.launch {
+            _inforPlaybackState.value = ItemUiState.Loading
+            when (val result = playerRepository.getAvailableDevices()) {
+                Result.Empty -> {
+                    _inforPlaybackState.value = ItemUiState.Empty
+                }
+                is Result.Error -> {
+                    _inforPlaybackState.value = ItemUiState.Error(result.message ?: "Unknown error")
+                }
+                is Result.Success -> {
+                    _inforPlaybackState.value = ItemUiState.Success(result.data)
+                }
+            }
+        }
+    }
+
 
     init {
         // Observe playerState real-time từ SDK callback
