@@ -29,6 +29,7 @@ interface PlayerRepository {
 
     val playerStateFlow: StateFlow<PlaybackState>
 
+    suspend  fun startSeekBarLoop()
 
     suspend fun transferPlayback(deviceId: String, play: Boolean): Result<Boolean>
 

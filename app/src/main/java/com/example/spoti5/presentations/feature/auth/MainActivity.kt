@@ -28,6 +28,7 @@ import com.example.spoti5.presentations.feature.play.PlayMusicViewModel
 import com.example.spoti5.presentations.feature.play.UiState.ItemUiState
 import com.example.spoti5.presentations.feature.play.UiState.PlayerUiState
 import com.example.spoti5.utils.SharePrefUtils
+import com.google.android.play.integrity.internal.v
 import com.spotify.android.appremote.api.ConnectionParams
 import com.spotify.android.appremote.api.SpotifyAppRemote
 import com.spotify.sdk.android.auth.AuthorizationClient
@@ -96,8 +97,8 @@ class MainActivity : AppCompatActivity() {
         // Observe Player State
         observePlayerState()
         observeSeekbar()
+        viewModel.startSeekBarLoop()
         // Observe devices
-        viewModel.fetchAvailableDevices()
         observeDevices()
 
 
@@ -108,11 +109,9 @@ class MainActivity : AppCompatActivity() {
     private fun observeSeekbar() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.playbackState.collect { state ->
-                    if (state is PlayerUiState.Success) {
-                        binding.seekBar.progress = state.data.positionMs.toInt()
-                        binding.seekBar.max = state.data.durationMs.toInt()
-                    }
+                viewModel.playerState.collect { state ->
+                    binding.seekBar.progress = state.positionMs.toInt()
+                    binding.seekBar.max = state.durationMs.toInt()
                 }
             }
         }
@@ -189,6 +188,14 @@ class MainActivity : AppCompatActivity() {
             } else {
                 Log.e(TAG, "Playback state is not available or not playing")
             }
+        }
+
+        binding.btnDevice.setOnClickListener {
+            // Open device selection dialog or activity
+            viewModel.viewModelScope.launch {
+                viewModel.fetchAvailableDevices()
+            }
+            Log.d(TAG, "Device button clicked, fetching available devices")
         }
 
         // open in PlayMusicFragment

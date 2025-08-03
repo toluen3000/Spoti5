@@ -1,6 +1,8 @@
 package com.example.spoti5.data.repositories
 
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import com.example.spoti5.BuildConfig
 import com.example.spoti5.data.apis.SpotifyApi
@@ -119,6 +121,29 @@ class PlayerRepositoryImpl @Inject constructor(
 
     override suspend fun resume() {
         spotifyAppRemote?.playerApi?.resume()
+    }
+
+    // seek bar loop
+    private val handler = Handler(Looper.getMainLooper())
+
+    private var isSeekLoopRunning = false
+
+    override suspend fun startSeekBarLoop() {
+        if (isSeekLoopRunning) return
+        isSeekLoopRunning = true
+
+        handler.post(object : Runnable {
+            override fun run() {
+                val currentState = _playerStateFlow.value
+                if (currentState.isPlaying) {
+                    val updated = currentState.copy(
+                        positionMs = currentState.positionMs + 1000
+                    )
+                    _playerStateFlow.value = updated
+                }
+                handler.postDelayed(this, 1000)
+            }
+        })
     }
 
     override suspend fun resumePlayback(deviceId: String): Result<Boolean> {
