@@ -54,7 +54,7 @@ class LibraryFragment : BaseFragment<FragmentLibraryBinding>() {
             tab.text = when (position) {
                 0 -> "Albums"
                 1 -> "Artists"
-                2 -> "Podcasts"
+                2 -> "Tracks"
                 else -> "Tab $position"
             }
         }.attach()
@@ -73,7 +73,7 @@ class LibraryFragment : BaseFragment<FragmentLibraryBinding>() {
                         binding.viewPager2.setCurrentItem(1, true)
                     }
                     2 -> {
-                        // Podcasts
+                        // Tracks
 
                         binding.viewPager2.setCurrentItem(2, true)
                     }
