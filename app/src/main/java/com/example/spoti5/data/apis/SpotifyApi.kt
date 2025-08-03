@@ -11,11 +11,13 @@ import com.example.spoti5.data.dto.artist.ArtistDetailDto
 import com.example.spoti5.data.dto.artist.ArtistTopTracksResponseDto
 import com.example.spoti5.data.dto.artist.RelatedArtistsResponseDto
 import com.example.spoti5.data.dto.artist.SeveralArtistsResponseDto
+import com.example.spoti5.data.dto.artist.UserFollowedArtistsResponse
 import com.example.spoti5.data.dto.library.UserSavedAlbumDto
 import com.example.spoti5.data.dto.player.CurrentPlayingTrackDto
 import com.example.spoti5.data.dto.player.DevicesResponse
 import com.example.spoti5.data.dto.player.RecentlyPlayedTrackResponseDto
 import com.example.spoti5.data.dto.player.UserQueueDto
+import com.example.spoti5.data.dto.search.SearchDto
 import com.example.spoti5.data.dto.track.TrackDto
 import com.example.spoti5.data.dto.track.UserSavedTrackDto
 import com.example.spoti5.data.dto.track.UserSavedTrackResponseDto
@@ -213,7 +215,23 @@ interface SpotifyApi {
 
 
 
+    // search api
+    @GET("search")
+    suspend fun searchAll(
+        @Query("q") query: String,
+        @Query("type") type: String = "artist,album,track,playlist",
+        @Query("limit") limit: Int = 20,
+        @Query("offset") offset: Int = 0
+    ): SearchDto
 
+
+    // following artists
+    @GET("me/following")
+    suspend fun getUserFollowingArtists(
+        @Query("type") type: String = "artist",
+        @Query("limit") limit: Int = 20,
+        @Query("after") after: String? = null
+    ): UserFollowedArtistsResponse
 
 
 
