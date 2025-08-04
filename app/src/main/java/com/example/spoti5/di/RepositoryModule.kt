@@ -64,4 +64,11 @@ abstract class RepositoryModule {
     abstract fun bindFollowingArtistRepository(
         impl: com.example.spoti5.data.repositories.FollowingArtistRepositoryImpl
     ): com.example.spoti5.domain.repository.FollowingArtistRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindSearchRepository(
+        impl: com.example.spoti5.data.repositories.SearchRepositoryImpl
+    ): com.example.spoti5.domain.repository.SearchRepository
+
 }
