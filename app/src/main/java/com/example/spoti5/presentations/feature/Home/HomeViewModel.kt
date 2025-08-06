@@ -16,16 +16,16 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import com.example.spoti5.data.result.Result
 import com.example.spoti5.domain.model.album.ArtistModel
-import com.example.spoti5.domain.model.album.NewAlbumsReleaseModel
-import com.example.spoti5.domain.model.artist.ArtistDetailModel
-import com.example.spoti5.domain.repository.ArtistDetailRepository
+import com.example.spoti5.domain.repository.PlayerRepository
 import com.example.spoti5.presentations.feature.auth.ViewModel.MainUiState.*
+import java.time.LocalDate
+import java.time.ZonedDateTime
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val repository: SpotifyRepository,
     private val albumRepository: AlbumsRepository,
-    private val artistRepository: ArtistDetailRepository
+    private val playerRepository: PlayerRepository,
 ) : ViewModel() {
 
     // StateFlow to hold the user state
@@ -125,12 +125,46 @@ class HomeViewModel @Inject constructor(
                             name = album.artists?.firstOrNull()?.name,
                             imageUrl = album.images?.firstOrNull()?.url
                         )
-                    })
+                    }.sortedBy { it.name })
                 }
             }
         }
     }
 
+
+    // fetch recently played tracks
+    private val _recentPlayedUiState = MutableStateFlow<MainUiState<List<com.example.spoti5.domain.model.player.AlbumModel>>>(
+        MainUiState.Loading
+    )
+    val recentPlayedUiState: StateFlow<MainUiState<List<com.example.spoti5.domain.model.player.AlbumModel>>> = _recentPlayedUiState.asStateFlow()
+
+    fun fetchRecentlyPlayedTracks() {
+        viewModelScope.launch {
+            _recentPlayedUiState.value = MainUiState.Loading
+            when (val result = playerRepository.getRecentTracks()) {
+                is Result.Success -> {
+                    val today = LocalDate.now()
+                    val albumList = result.data.items
+                        ?.filter { item ->
+                            val playedAt = item.playedAt
+                            playedAt != null && ZonedDateTime.parse(playedAt).toLocalDate().isEqual(today)
+                        }
+                        ?.mapNotNull { it.track?.album }
+                        ?.distinctBy { it.id }
+                        ?.take(8)
+
+                    _recentPlayedUiState.value = Success(albumList ?: emptyList())
+                    Log.d("HomeViewModel", "Fetched ${albumList?.size ?: 0} recently played albums")
+                }
+                is Result.Error -> {
+                    _recentPlayedUiState.value = Error(result.message ?: "An error occurred")
+                }
+                Result.Empty -> {
+                    _recentPlayedUiState.value = Error("No recently played tracks found")
+                }
+            }
+        }
+    }
 
 
 

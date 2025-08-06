@@ -11,6 +11,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -76,7 +79,7 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
-
+        hideNavigationBarOnly()
 
         // Define navHostFragment to navController to manage the screens
         val navHostFragment =
@@ -242,6 +245,16 @@ class MainActivity : AppCompatActivity() {
             Glide.with(this@MainActivity)
                 .load(state.albumImageUrl)
                 .into(binding.imgTrack)
+        }
+    }
+
+    private fun hideNavigationBarOnly() {
+        WindowCompat.setDecorFitsSystemWindows(window, true)
+
+        WindowInsetsControllerCompat(window, findViewById(android.R.id.content)).let { controller ->
+            controller.hide(WindowInsetsCompat.Type.navigationBars())
+            controller.systemBarsBehavior =
+                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         }
     }
 

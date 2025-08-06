@@ -16,6 +16,7 @@ import com.example.spoti5.base.BaseFragment
 import com.example.spoti5.databinding.FragmentHomeBinding
 import com.example.spoti5.presentations.feature.Home.adapter.AlbumAdapter
 import com.example.spoti5.presentations.feature.Home.adapter.ArtistAdapter
+import com.example.spoti5.presentations.feature.Home.adapter.RecentAlbumAdapter
 import com.example.spoti5.presentations.feature.auth.ViewModel.MainUiState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -29,6 +30,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
     private lateinit var artistAdapter: ArtistAdapter
 
+    private lateinit var recentAlbumAdapter: RecentAlbumAdapter
 
     override fun inflateBinding(
         inflater: LayoutInflater,
@@ -44,13 +46,18 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
         setUpArtistRecycleView()
 
+        setUpRecentPlayedRecyclerView()
+
         viewModel.fetchUserInfo()
         viewModel.fetchNewAlbums()
         viewModel.fetchArtistsFromNewAlbumsRelease()
+        viewModel.fetchRecentlyPlayedTracks()
 
         // observe artist
         observeArtist()
 
+        // observe recent played albums
+        observeRecentPlayedAlbums()
 
 
         // Fetch user info
@@ -95,6 +102,46 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    private fun observeRecentPlayedAlbums() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.recentPlayedUiState.collect { state ->
+                    when (state) {
+                        is MainUiState.Loading -> {
+                            Log.d(TAG, "Loading recent played albums...")
+                        }
+                        is MainUiState.Success -> {
+                            Log.d(TAG, "Fetched ${state.data.size} recent played albums")
+                            recentAlbumAdapter.submitList(state.data)
+                        }
+                        is MainUiState.Error -> {
+                            Log.d(TAG, "Error fetching recent played albums: ${state.message}")
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun setUpRecentPlayedRecyclerView() = with(binding) {
+        binding.rvRecentPlayed.apply {
+            recentAlbumAdapter = RecentAlbumAdapter()
+            adapter = recentAlbumAdapter
+
+            recentAlbumAdapter.setOnItemClickListener { album ->
+                // get album id and move to details screen
+                Log.d(TAG, "Recent Album clicked: ${album.name} with ID: ${album.id}")
+
+                //show imgUrl
+                val imageUrl = album.images?.firstOrNull()?.url
+                Log.d(TAG, "Recent Album image URL: ${imageUrl ?: "No image available"}")
+                // Navigate to album details screen
+                val action = HomeFragmentDirections.actionHomeScreenFragmentToDetailsAlbumFragment(album.id,imageUrl)
+                findNavController().navigate(action)
             }
         }
     }
