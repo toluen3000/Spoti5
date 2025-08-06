@@ -26,6 +26,7 @@ data class AlbumDto(
             name = name ?: "",
             images = images?.map { it.toDomainModel() } ?: emptyList(),
             releaseDate = releaseDate ?: "",
+            artists = artists.orEmpty().map { it.toDomainModel() }
         )
     }
 }
