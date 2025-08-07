@@ -27,6 +27,8 @@ interface PlayerRepository {
 
     suspend fun skipPrevious()
 
+    suspend fun seekTo(positionMs: Long)
+
     val playerStateFlow: StateFlow<PlaybackState>
 
     suspend  fun startSeekBarLoop()
@@ -35,11 +37,11 @@ interface PlayerRepository {
 
     suspend fun getAvailableDevices(): Result<List<DeviceModel>>
 
-    suspend fun setRepeatMode(state: RepeatMode): Result<Boolean>
+    suspend fun setRepeatMode(state: String, deviceId: String): Result<Boolean>
 
     suspend fun setPlaybackVolume(volumePercent: Int): Result<Boolean>
 
-    suspend fun toggleShuffleMode(state: Boolean): Result<Boolean>
+    suspend fun toggleShuffleMode()
 
     suspend fun getRecentTracks(): Result<RecentlyPlayedTrackModel>
 

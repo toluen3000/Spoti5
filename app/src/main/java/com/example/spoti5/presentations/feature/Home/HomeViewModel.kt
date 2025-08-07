@@ -143,12 +143,7 @@ class HomeViewModel @Inject constructor(
             _recentPlayedUiState.value = MainUiState.Loading
             when (val result = playerRepository.getRecentTracks()) {
                 is Result.Success -> {
-                    val today = LocalDate.now()
                     val albumList = result.data.items
-                        ?.filter { item ->
-                            val playedAt = item.playedAt
-                            playedAt != null && ZonedDateTime.parse(playedAt).toLocalDate().isEqual(today)
-                        }
                         ?.mapNotNull { it.track?.album }
                         ?.distinctBy { it.id }
                         ?.take(8)

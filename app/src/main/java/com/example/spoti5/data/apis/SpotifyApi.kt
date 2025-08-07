@@ -13,6 +13,7 @@ import com.example.spoti5.data.dto.artist.RelatedArtistsResponseDto
 import com.example.spoti5.data.dto.artist.SeveralArtistsResponseDto
 import com.example.spoti5.data.dto.artist.UserFollowedArtistsResponse
 import com.example.spoti5.data.dto.library.UserSavedAlbumDto
+import com.example.spoti5.data.dto.player.AvailableDevicesDto
 import com.example.spoti5.data.dto.player.CurrentPlayingTrackDto
 import com.example.spoti5.data.dto.player.DevicesResponse
 import com.example.spoti5.data.dto.player.RecentlyPlayedTrackResponseDto
@@ -120,8 +121,8 @@ interface SpotifyApi {
         @Body body: TransferPlaybackBody
     ): Response<Unit>
 
-    @GET("/me/player/devices")
-    suspend fun getAvailableDevices(): DevicesResponse
+    @GET("me/player/devices")
+    suspend fun getAvailableDevices(): AvailableDevicesDto
 
     // resume playback
     @PUT("me/player/play")
