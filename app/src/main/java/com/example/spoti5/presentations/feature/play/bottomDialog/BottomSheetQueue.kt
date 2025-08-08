@@ -62,7 +62,9 @@ open class BottomSheetQueue : BottomSheetDialogFragment() {
             adapter = itemAdapter
 
             itemAdapter.setOnItemClickListener { track ->
-                Log.d(TAG,"item click ${track.name}")
+                Log.d(TAG,"item click ${track.uri}")
+                viewModel.play(track.uri.toString())
+                dismiss()
             }
 
         }
