@@ -22,6 +22,7 @@ import com.example.spoti5.domain.model.player.utils.PlaybackState
 import com.example.spoti5.domain.model.track.TrackModel
 import com.example.spoti5.presentations.feature.play.UiState.ItemUiState
 import com.example.spoti5.presentations.feature.play.UiState.PlayerUiState
+import com.example.spoti5.presentations.feature.play.bottomDialog.BottomSheetDevice
 import com.example.spoti5.presentations.feature.play.bottomDialog.BottomSheetQueue
 import com.example.spoti5.utils.RepeatMode
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -128,6 +129,18 @@ class PlayMusicFragment : BaseFragment<FragmentPlayMusicBinding>() {
         binding.btnQueue.setOnClickListener {
             openBottomSheet()
         }
+    }
+
+    private fun btnDeviceSetOnClick() {
+
+        binding.btnDevice.setOnClickListener {
+            openBottomDialog()
+        }
+    }
+
+    private fun openBottomDialog() {
+        val bottomSheet = BottomSheetDevice()
+        bottomSheet.show(childFragmentManager, bottomSheet.tag)
     }
 
     private fun observeUserQueue() {
@@ -363,14 +376,7 @@ class PlayMusicFragment : BaseFragment<FragmentPlayMusicBinding>() {
 
 
 
-private fun btnDeviceSetOnClick() {
 
-
-
-        binding.btnDevice.setOnClickListener {
-            viewModel.fetchAvailableDevices()
-        }
-    }
 
     private fun observerDeviceState() {
         viewLifecycleOwner.lifecycleScope.launch {

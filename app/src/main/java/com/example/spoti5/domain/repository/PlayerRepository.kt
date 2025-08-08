@@ -1,5 +1,6 @@
 package com.example.spoti5.domain.repository
 
+import com.example.spoti5.data.apis.SpotifyApi
 import com.example.spoti5.data.result.Result
 import com.example.spoti5.domain.model.player.DeviceModel
 import com.example.spoti5.domain.model.player.RecentlyPlayedTrackModel
@@ -33,7 +34,7 @@ interface PlayerRepository {
 
     suspend  fun startSeekBarLoop()
 
-    suspend fun transferPlayback(deviceId: String, play: Boolean): Result<Boolean>
+    suspend fun transferPlayback(deviceId: SpotifyApi.TransferPlaybackBody): Result<Boolean>
 
     suspend fun getAvailableDevices(): Result<List<DeviceModel>>
 

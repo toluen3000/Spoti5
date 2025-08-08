@@ -5,6 +5,7 @@ import android.os.Looper
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.spoti5.data.apis.SpotifyApi
 import com.example.spoti5.data.result.Result
 import com.example.spoti5.domain.model.player.DeviceModel
 import com.example.spoti5.domain.model.player.UserQueueModel
@@ -214,6 +215,31 @@ class PlayMusicViewModel @Inject constructor(
                 }
                 is Result.Success -> {
                     _repeatModeState.value = ItemUiState.Success(result.data)
+                }
+            }
+        }
+    }
+
+
+    // transfer playback
+
+    private val _transPlayback = MutableStateFlow<ItemUiState<Boolean>>(ItemUiState.Loading)
+    val tramsPlayback: StateFlow<ItemUiState<Boolean>> = _transPlayback.asStateFlow()
+
+    fun transferPlayback(deviceId: SpotifyApi.TransferPlaybackBody) {
+        viewModelScope.launch {
+            _transPlayback.value = ItemUiState.Loading
+
+            when ( val result = playerRepository.transferPlayback(deviceId)) {
+                Result.Empty -> {
+                    Log.d("Trans Playback","Empty")
+                    _transPlayback.value = ItemUiState.Empty
+                }
+                is Result.Error -> {
+                    _transPlayback.value = ItemUiState.Error(result.message ?: "Unknown")
+                }
+                is Result.Success -> {
+                    _transPlayback.value = ItemUiState.Success(result.data)
                 }
             }
         }

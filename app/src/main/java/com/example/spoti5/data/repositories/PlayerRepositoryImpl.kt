@@ -182,12 +182,11 @@ class PlayerRepositoryImpl @Inject constructor(
 
 
     override suspend fun transferPlayback(
-        deviceId: String,
-        play: Boolean
+        deviceId: SpotifyApi.TransferPlaybackBody
     ): Result<Boolean> {
         return withContext(ioDispatcher) {
             safeApiCall {
-               val response = api.transferPlayback(SpotifyApi.TransferPlaybackBody(listOf(deviceId),play))
+               val response = api.transferPlayback(deviceId)
                 if (response.isSuccessful) {
                     Result.Success(true)
                 } else {
