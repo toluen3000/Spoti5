@@ -163,6 +163,10 @@
         <action
             android:id="@+id/action_playMusicFragment_to_searchScreenFragment"
             app:destination="@id/searchScreenFragment" />
+        <argument
+            android:name="isPlaying"
+            app:argType="boolean"
+            android:defaultValue="false" />
     </fragment>
     <fragment
         android:id="@+id/trackLibraryFragment"

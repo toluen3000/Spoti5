@@ -39,7 +39,7 @@
                 android:id="@+id/txtPlayingFrom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
+                android:layout_marginTop="8dp"
                 android:fontFamily="@font/poppins_bold"
                 android:text="Playing"
                 app:layout_constraintEnd_toStartOf="@+id/btnOptions"
@@ -120,14 +120,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/btnX"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:src="@drawable/close_x_svgrepo_com"
-                app:layout_constraintEnd_toStartOf="@+id/btnAdd"
-                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
