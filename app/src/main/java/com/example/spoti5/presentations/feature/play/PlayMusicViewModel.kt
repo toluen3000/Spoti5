@@ -1,21 +1,27 @@
 package com.example.spoti5.presentations.feature.play
 
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.spoti5.data.result.Result
 import com.example.spoti5.domain.model.player.DeviceModel
+import com.example.spoti5.domain.model.player.UserQueueModel
+import com.example.spoti5.domain.model.player.utils.PlaybackState
 import com.example.spoti5.domain.model.track.TrackModel
 import com.example.spoti5.domain.repository.ExoplayerRepository
 import com.example.spoti5.domain.repository.PlayerRepository
 import com.example.spoti5.domain.repository.TrackRepository
 import com.example.spoti5.presentations.feature.play.UiState.ItemUiState
 import com.example.spoti5.presentations.feature.play.UiState.PlayerUiState
+import com.example.spoti5.utils.RepeatMode
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -61,6 +67,12 @@ class PlayMusicViewModel @Inject constructor(
         }
     }
 
+    fun previous() {
+        viewModelScope.launch {
+            playerRepository.skipPrevious()
+        }
+    }
+
     fun resume(useSdk: Boolean = true) {
         viewModelScope.launch {
             if (useSdk) {
@@ -73,11 +85,44 @@ class PlayMusicViewModel @Inject constructor(
         }
     }
 
+    fun toggleShuffleButton(){
+        viewModelScope.launch {
+            playerRepository.toggleShuffleMode()
+        }
+    }
+
+    fun seekTo(positionMs: Long) {
+        viewModelScope.launch {
+            playerRepository.seekTo(positionMs)
+        }
+    }
+
+    // update seekbar with playback state
+    val playerState: StateFlow<PlaybackState> = playerRepository.playerStateFlow
+
+    fun startSeekBarLoop() {
+        viewModelScope.launch {
+            playerRepository.startSeekBarLoop()
+        }
+    }
+
+
     //---------------------------------------------------------------------------------------
+
+
     // Using Web API for playback state
 
     private val _playbackState = MutableStateFlow<PlayerUiState>(PlayerUiState.Idle)
     val playbackState: StateFlow<PlayerUiState> = _playbackState.asStateFlow()
+
+    init {
+        // Observe playerState real-time từ SDK callback
+        viewModelScope.launch {
+            playerRepository.playerStateFlow.collect { state ->
+                _playbackState.value = PlayerUiState.Success(state)
+            }
+        }
+    }
 
     // Fetch infor
 
@@ -94,6 +139,7 @@ class PlayMusicViewModel @Inject constructor(
                 }
                 is Result.Error -> {
                     _inforPlaybackState.value = ItemUiState.Error(result.message ?: "Unknown error")
+                    Log.d("PlayMusicViewModel", "Error fetching devices")
                 }
                 is Result.Success -> {
                     _inforPlaybackState.value = ItemUiState.Success(result.data)
@@ -103,14 +149,7 @@ class PlayMusicViewModel @Inject constructor(
     }
 
 
-    init {
-        // Observe playerState real-time từ SDK callback
-        viewModelScope.launch {
-            playerRepository.playerStateFlow.collect { state ->
-                _playbackState.value = PlayerUiState.Success(state)
-            }
-        }
-    }
+
 
 
     //---------------------------------------------------------------------------------------
@@ -124,19 +163,61 @@ class PlayMusicViewModel @Inject constructor(
         fun fetchTrackById(trackId: String) {
             viewModelScope.launch {
                  _trackState.value = ItemUiState.Loading
-                 when (val result = trackRepository.getTrackById(trackId)) {
-                     Result.Empty -> {
-                            _trackState.value = ItemUiState.Empty
-                     }
-                     is Result.Error -> {
-                            _trackState.value = ItemUiState.Error(result.message ?: "Unknown error")
-                     }
-                     is Result.Success -> {
-                            _trackState.value = ItemUiState.Success(result.data)
-                     }
-                 }
+                 val result = trackRepository.getTrackById(trackId)
+
+                _trackState.value = when (result) {
+                    Result.Empty -> ItemUiState.Empty
+                    is Result.Error -> ItemUiState.Error(result.message ?: "Unknown error")
+                    is Result.Success -> ItemUiState.Success(result.data)
+                }
             }
         }
+
+    // fetch user queue
+    private val _userQueueState = MutableStateFlow<ItemUiState<UserQueueModel>>(
+        ItemUiState.Loading)
+    val userQueueState: StateFlow<ItemUiState<UserQueueModel>> = _userQueueState.asStateFlow()
+
+    fun fetchUserQueue() {
+        viewModelScope.launch {
+            _userQueueState.value = ItemUiState.Loading
+            when (val result = playerRepository.getUserQueue()) {
+                Result.Empty -> {
+                    _userQueueState.value = ItemUiState.Empty
+                }
+                is Result.Error -> {
+                    _userQueueState.value = ItemUiState.Error(result.message ?: "Unknown error")
+                }
+                is Result.Success -> {
+                    _userQueueState.value = ItemUiState.Success(result.data)
+
+                }
+            }
+        }
+    }
+
+
+    // toggle repeat mode
+
+    private val _repeatModeState = MutableStateFlow<ItemUiState<Boolean>>(ItemUiState.Loading)
+    val repeatModeState: StateFlow<ItemUiState<Boolean>> = _repeatModeState.asStateFlow()
+
+    fun setRepeatMode(state: String, deviceId: String) {
+        viewModelScope.launch {
+            _repeatModeState.value = ItemUiState.Loading
+            when (val result = playerRepository.setRepeatMode(state, deviceId)) {
+                Result.Empty -> {
+                    _repeatModeState.value = ItemUiState.Empty
+                }
+                is Result.Error -> {
+                    _repeatModeState.value = ItemUiState.Error(result.message ?: "Unknown error")
+                }
+                is Result.Success -> {
+                    _repeatModeState.value = ItemUiState.Success(result.data)
+                }
+            }
+        }
+    }
 
 
 

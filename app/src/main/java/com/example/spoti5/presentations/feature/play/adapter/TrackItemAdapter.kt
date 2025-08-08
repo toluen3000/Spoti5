@@ -56,7 +56,7 @@ class TrackItemAdapter: RecyclerView.Adapter<TrackItemAdapter.TrackItemViewHolde
         this.onItemClickListener = listener
     }
     fun submitList(newList: List<TrackItemModel>) {
-        listItem = newList
+        listItem = newList.distinctBy { it.uri }
         notifyDataSetChanged()
     }
 

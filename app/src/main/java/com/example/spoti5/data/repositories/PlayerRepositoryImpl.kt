@@ -96,7 +96,7 @@ class PlayerRepositoryImpl @Inject constructor(
                     durationMs = track.duration
                 )
 
-                _playerStateFlow.value = newState
+//                _playerStateFlow.value = newState
 
                 spotifyAppRemote?.imagesApi
                     ?.getImage(track.imageUri, Image.Dimension.LARGE)
@@ -122,6 +122,11 @@ class PlayerRepositoryImpl @Inject constructor(
     override suspend fun resume() {
         spotifyAppRemote?.playerApi?.resume()
     }
+
+    override suspend fun toggleShuffleMode() {
+        spotifyAppRemote?.playerApi?.toggleShuffle()
+    }
+
 
     // seek bar loop
     private val handler = Handler(Looper.getMainLooper())
@@ -167,6 +172,14 @@ class PlayerRepositoryImpl @Inject constructor(
         spotifyAppRemote?.playerApi?.skipPrevious()
     }
 
+    override suspend fun seekTo(positionMs: Long) {
+        spotifyAppRemote?.playerApi?.seekTo(positionMs)?.setResultCallback {
+            Log.d("PlayerRepository", "Seeked to position: $positionMs")
+        }?.setErrorCallback { error ->
+            Log.e("PlayerRepository", "Seek failed: ${error.message}")
+        }
+    }
+
 
     override suspend fun transferPlayback(
         deviceId: String,
@@ -188,16 +201,20 @@ class PlayerRepositoryImpl @Inject constructor(
         return withContext(ioDispatcher){
             safeApiCall {
                 val response = api.getAvailableDevices()
-                Result.Success(response.devices.map { it.toDomainModel() } )
+                Log.d("DEBUG", "Device API raw: $response")
+                val deviceModels = response.devices?.map { it.toDomainModel() } ?: emptyList()
+                Result.Success(deviceModels)
+
+
             }
         }
     }
 
 
-    override suspend fun setRepeatMode(state: RepeatMode): Result<Boolean> {
+    override suspend fun setRepeatMode(state: String, deviceId: String): Result<Boolean> {
         return withContext(ioDispatcher) {
             safeApiCall {
-                val response = api.repeatMode(state.name)
+                val response = api.repeatMode(state, deviceId)
                 if (response.isSuccessful) {
                     Result.Success(true)
                 } else {
@@ -220,18 +237,6 @@ class PlayerRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun toggleShuffleMode(state: Boolean): Result<Boolean> {
-        return withContext(ioDispatcher){
-            safeApiCall {
-                val response = api.togglePlaybackShuffle(state)
-                if (response.isSuccessful) {
-                    Result.Success(true)
-                } else {
-                    Result.Error("Toggle shuffle mode failed with code ${response.code()}")
-                }
-            }
-        }
-    }
 
     override suspend fun getRecentTracks(): Result<RecentlyPlayedTrackModel> {
         return withContext(ioDispatcher) {
