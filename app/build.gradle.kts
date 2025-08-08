@@ -19,6 +19,7 @@ android {
     compileSdk = 36
 
     defaultConfig {
+        vectorDrawables.useSupportLibrary = true
         applicationId = "com.example.spoti5"
         minSdk = 29
         targetSdk = 36
