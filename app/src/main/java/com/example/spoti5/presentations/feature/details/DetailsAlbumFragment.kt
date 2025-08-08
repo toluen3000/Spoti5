@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.LongDef
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -23,6 +24,7 @@ import com.example.spoti5.presentations.feature.details.UiState.CheckSavedAlbumS
 import com.example.spoti5.presentations.feature.details.UiState.DeleteUiState
 import com.example.spoti5.presentations.feature.details.UiState.SaveUiState
 import com.example.spoti5.presentations.feature.details.adapter.DetailsAlbumAdapter
+import com.example.spoti5.presentations.feature.play.PlayMusicViewModel
 import com.google.android.play.integrity.internal.a
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -31,6 +33,7 @@ import kotlinx.coroutines.launch
 class DetailsAlbumFragment : BaseFragment<FragmentDetailsAlbumBinding>() {
 
 
+    private val viewModelPlayer: PlayMusicViewModel by activityViewModels()
 
 
     private lateinit var albumId: String
@@ -86,8 +89,26 @@ class DetailsAlbumFragment : BaseFragment<FragmentDetailsAlbumBinding>() {
         // Save btn
         saveBtnOnClick()
 
+        // Album play btn
+        btnPlayOnClick()
 
 
+
+    }
+
+    private fun btnPlayOnClick() {
+        var count = 1
+        binding.btnPlay.setOnClickListener {
+
+            if(count % 2 != 0){
+                viewModelPlayer.play("spotify:album:$albumId")
+                binding.btnPlay.setImageResource(R.drawable.ic_pause)
+                count++
+            }else{
+                binding.btnPlay.setImageResource(R.drawable.ic_play_button)
+                count++
+            }
+        }
     }
 
     private fun observeDeleteAlbumState() {

@@ -210,6 +210,7 @@ class MainActivity : AppCompatActivity() {
             val bundle = Bundle().apply {
                 putString("uri", trackUri)
                 putString("idTrack",idTrack)
+                putBoolean("isPlaying",true)
             }
 
 
