@@ -1,6 +1,5 @@
 package com.example.spoti5.presentations.feature.play
 
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -19,20 +18,18 @@ import com.example.spoti5.R
 import com.example.spoti5.base.BaseFragment
 import com.example.spoti5.databinding.FragmentPlayMusicBinding
 import com.example.spoti5.domain.model.player.utils.PlaybackState
-import com.example.spoti5.domain.model.track.TrackModel
 import com.example.spoti5.presentations.feature.play.UiState.ItemUiState
 import com.example.spoti5.presentations.feature.play.UiState.PlayerUiState
 import com.example.spoti5.presentations.feature.play.bottomDialog.BottomSheetDevice
 import com.example.spoti5.presentations.feature.play.bottomDialog.BottomSheetQueue
 import com.example.spoti5.utils.RepeatMode
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlin.getValue
 
 
 @AndroidEntryPoint
-class PlayMusicFragment : BaseFragment<FragmentPlayMusicBinding>() {
+class PlayMusicFragment : BaseFragment<FragmentPlayMusicBinding>(){
 
     private val viewModel: PlayMusicViewModel by activityViewModels()
 

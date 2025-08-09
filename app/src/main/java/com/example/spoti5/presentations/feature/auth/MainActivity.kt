@@ -30,6 +30,7 @@ import com.example.spoti5.domain.model.player.utils.PlaybackState
 import com.example.spoti5.presentations.feature.play.PlayMusicViewModel
 import com.example.spoti5.presentations.feature.play.UiState.ItemUiState
 import com.example.spoti5.presentations.feature.play.UiState.PlayerUiState
+import com.example.spoti5.presentations.feature.play.bottomDialog.BottomSheetDevice
 import com.example.spoti5.utils.SharePrefUtils
 import com.google.android.play.integrity.internal.v
 import com.spotify.android.appremote.api.ConnectionParams
@@ -174,6 +175,12 @@ class MainActivity : AppCompatActivity() {
         binding.playMusicDialog.visibility = View.GONE
     }
 
+    private fun openBottomDialog() {
+        val bottomSheet = BottomSheetDevice()
+        bottomSheet.show(supportFragmentManager, bottomSheet.tag)
+    }
+
+
     private fun setupMiniPlayerControls() {
 
         binding.playMusicDialog.visibility = View.GONE
@@ -193,12 +200,9 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+
         binding.btnDevice.setOnClickListener {
-            // Open device selection dialog or activity
-            viewModel.viewModelScope.launch {
-                viewModel.fetchAvailableDevices()
-            }
-            Log.d(TAG, "Device button clicked, fetching available devices")
+            openBottomDialog()
         }
 
         // open in PlayMusicFragment

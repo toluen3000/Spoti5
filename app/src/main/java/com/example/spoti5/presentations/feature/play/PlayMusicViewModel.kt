@@ -134,17 +134,11 @@ class PlayMusicViewModel @Inject constructor(
     fun fetchAvailableDevices() {
         viewModelScope.launch {
             _inforPlaybackState.value = ItemUiState.Loading
-            when (val result = playerRepository.getAvailableDevices()) {
-                Result.Empty -> {
-                    _inforPlaybackState.value = ItemUiState.Empty
-                }
-                is Result.Error -> {
-                    _inforPlaybackState.value = ItemUiState.Error(result.message ?: "Unknown error")
-                    Log.d("PlayMusicViewModel", "Error fetching devices")
-                }
-                is Result.Success -> {
-                    _inforPlaybackState.value = ItemUiState.Success(result.data)
-                }
+            val result = playerRepository.getAvailableDevices()
+            _inforPlaybackState.value = when(result) {
+                Result.Empty -> ItemUiState.Empty
+                is Result.Error -> { ItemUiState.Error(result.message ?: "Unknown error") }
+                is Result.Success -> { ItemUiState.Success(result.data) }
             }
         }
     }

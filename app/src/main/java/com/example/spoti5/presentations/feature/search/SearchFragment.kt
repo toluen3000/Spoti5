@@ -2,27 +2,19 @@ package com.example.spoti5.presentations.feature.search
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import com.example.spoti5.R
 import com.example.spoti5.base.BaseFragment
 import com.example.spoti5.databinding.FragmentSearchBinding
-import com.example.spoti5.presentations.feature.auth.ViewModel.MainUiState
 import com.example.spoti5.presentations.feature.search.UiState.SearchUiState
 import com.example.spoti5.presentations.feature.search.adapter.SearchAdapter
-import com.example.spoti5.presentations.feature.search.adapter.SearchAlbumItemAdapter
-import com.example.spoti5.presentations.feature.search.adapter.SearchArtistItemAdapter
-import com.example.spoti5.presentations.feature.search.adapter.SearchTrackItemAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 

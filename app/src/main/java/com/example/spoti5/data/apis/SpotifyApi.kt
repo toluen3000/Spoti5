@@ -19,6 +19,7 @@ import com.example.spoti5.data.dto.player.DevicesResponse
 import com.example.spoti5.data.dto.player.RecentlyPlayedTrackResponseDto
 import com.example.spoti5.data.dto.player.UserQueueDto
 import com.example.spoti5.data.dto.search.SearchDto
+import com.example.spoti5.data.dto.track.RecommendationResponse
 import com.example.spoti5.data.dto.track.TrackDto
 import com.example.spoti5.data.dto.track.UserSavedTrackDto
 import com.example.spoti5.data.dto.track.UserSavedTrackResponseDto
@@ -208,10 +209,8 @@ interface SpotifyApi {
     @GET("recommendations")
     suspend fun getRecommendedTracks(
         @Query("limit") limit: Int = 20,
-        @Query("seed_artists") seedArtists: String? = null,
-        @Query("seed_genres") seedGenres: String? = null,
         @Query("seed_tracks") seedTracks: String? = null
-    ): Response<TrackDto>
+    ): RecommendationResponse
 
 
 
