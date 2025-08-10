@@ -14,10 +14,12 @@ Các endpoint được sử dụng nằm trong phần [Web API Reference](https:
 - [x] Tìm kiếm bài hát, album, nghệ sĩ
 - [x] Xem chi tiết album và danh sách bài hát
 - [x] Xem User Queue và chọn để phát nhạc
-- [] Quản lý thiết bị và chuyển playback giữa các thiết bị 
+- [x] Quản lý thiết bị và chuyển playback giữa các thiết bị 
 - [x] Điều khiển phát nhạc bằng Spotify Android SDK (play, pause, next, previous)
 - [x] Hiển thị danh sách bài hát đã nghe gần đây
 - [x] Áp dụng kiến trúc **MVVM + Clean Architecture**
+- [ ] Cache data
+- [ ] Recustomize UI
 
 ---
 
