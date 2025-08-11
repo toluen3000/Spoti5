@@ -1,6 +1,7 @@
 package com.example.spoti5.data.repositories
 
 import com.example.spoti5.data.apis.SpotifyApi
+import com.example.spoti5.data.dto.track.RecommendationResponse
 import com.example.spoti5.data.result.Result
 import com.example.spoti5.data.result.safeApiCall
 import com.example.spoti5.di.IoDispatcher
@@ -43,31 +44,57 @@ class TrackRepositoryImpl @Inject constructor (
         return withContext(ioDispatcher){
             safeApiCall {
                 val response = api.getUserSavedTracks(limit, offset)
-                Result.Success(response.items?.map { it.track.toDomainModel() } ?: emptyList())
+                Result.Success(response.items.map { it.track.toDomainModel() })
             }
         }
     }
 
-    override suspend fun saveTrackForCurrentUser(trackIds: String): Result<Unit> {
-        TODO("Not yet implemented")
+    override suspend fun saveTrackForCurrentUser(trackIds: String): Result<Boolean> {
+        return withContext(ioDispatcher){
+            val response = api.saveTrackForCurrentUser(trackIds)
+
+            if (response.isSuccessful){
+                Result.Success(true)
+            }else {
+                Result.Error("Save failed with code ${response.code()}")
+            }
+
+        }
     }
 
-    override suspend fun removeTrackFromUserLibrary(trackIds: String): Result<Unit> {
-        TODO("Not yet implemented")
+    override suspend fun removeTrackFromUserLibrary(trackIds: String): Result<Boolean> {
+        return withContext(ioDispatcher){
+            val response = api.removeTrackFromUserLibrary(trackIds)
+
+            if (response.isSuccessful){
+                Result.Success(true)
+            }else{
+                Result.Error("Delete failed with code ${response.code()}")
+            }
+        }
     }
 
     override suspend fun isTrackSavedForCurrentUser(trackId: String): Result<Boolean> {
-        TODO("Not yet implemented")
+        return withContext(ioDispatcher){
+            val response = api.getUserSavedTracks()
+            if (response.items.any { it.track.id == trackId }){
+                Result.Success(true)
+            }else{
+                Result.Success(false)
+            }
+        }
     }
 
     override suspend fun getRecommendedTracks(
         limit: Int,
-        market: String?,
-        seedArtists: String?,
-        seedGenres: String?,
         seedTracks: String?
     ): Result<List<TrackModel>> {
-        TODO("Not yet implemented")
+        return withContext(ioDispatcher){
+            safeApiCall {
+                val response = api.getRecommendedTracks(limit, seedTracks)
+                Result.Success(response.tracks!!.map { it.toDomainModel()})
+            }
+        }
     }
 
 

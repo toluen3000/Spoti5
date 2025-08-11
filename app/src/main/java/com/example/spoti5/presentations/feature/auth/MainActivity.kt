@@ -10,6 +10,7 @@ import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -77,6 +78,7 @@ class MainActivity : AppCompatActivity() {
 
         Thread.sleep(1000)
         installSplashScreen()
+        window.statusBarColor = ContextCompat.getColor(this, R.color.transparent)
 
         setContentView(binding.root)
 

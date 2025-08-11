@@ -1,11 +1,14 @@
 package com.example.spoti5.presentations.feature.search
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.SearchView
+import android.widget.EditText
+import android.widget.ImageView
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -41,11 +44,26 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
         super.onViewCreated(view, savedInstanceState)
 
 
+        setUpSearchView()
         setUpSearchRecyclerView()
         // search view changes to fetch results
         searchViewChangeText()
         observeSearchResult()
 
+    }
+
+    private fun setUpSearchView() {
+        // Lấy EditText bên trong SearchView
+        val searchEditText = binding.searchView.findViewById<EditText>(androidx.appcompat.R.id.search_src_text)
+
+        searchEditText.setTextColor(Color.BLACK)
+        searchEditText.setHintTextColor(Color.BLACK)
+        searchEditText.setHint("Search here!")
+        val searchIcon = binding.searchView.findViewById<ImageView>(androidx.appcompat.R.id.search_mag_icon)
+        searchIcon.setColorFilter(Color.BLACK)
+
+        val closeIcon = binding.searchView.findViewById<ImageView>(androidx.appcompat.R.id.search_close_btn)
+        closeIcon.setColorFilter(Color.BLACK)
     }
 
     private fun searchViewChangeText() {
