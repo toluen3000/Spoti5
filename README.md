@@ -42,6 +42,17 @@ Các endpoint được sử dụng nằm trong phần [Web API Reference](https:
 
 ## 📸 Screenshots
 
+| ![HomeScreen](ScreenShot/Home.jpg) | ![Detail Artist](ScreenShot/Artist_Details.jpg) | ![Search](ScreenShot/Search.jpg) |
+| -------------------- | ------------------- | --------------------- |
+| **HomeScreen**            | **Detail Artist**            | **Search**            |
+
+| ![Album Details](ScreenShot/Album_Details.jpg) | ![Track Playing](ScreenShot/Song_Playing.jpg) | ![User Queue](ScreenShot/User_Queue.jpg) |
+| ---------------------------- | --------------------------- | -------------------- |
+| **Album Details**            | **Track Playing**           | **User Queue**       |
+
+| ![Devices Available](ScreenShot/Devices_Available.jpg) | ![Lib Album](ScreenShot/Library_Albums.jpg) | ![Lib Artists](ScreenShot/Library_Artists.jpg) |
+| ---------------------------- | ---------------------------- | ----------------------- |
+| **Devices Available**            | **Lib Album**           | **Lib Artists**    |
 
 ---
 
