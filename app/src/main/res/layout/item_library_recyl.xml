@@ -5,6 +5,7 @@
     android:layout_marginStart="8dp"
     android:layout_marginEnd="8dp"
     android:layout_marginTop="8dp"
+    app:cardCornerRadius="6dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
@@ -23,6 +24,7 @@
             tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
+            android:textColor="@color/white"
             android:id="@+id/txtAlbumName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -36,6 +38,7 @@
             tools:text="Track Name" />
 
         <TextView
+            android:textColor="@color/white"
             android:id="@+id/txtArtistName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

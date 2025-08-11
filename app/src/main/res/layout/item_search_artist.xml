@@ -10,6 +10,7 @@
     android:layout_marginTop="8dp"
     app:cardElevation="0dp"
     android:background="@color/transparent"
+    app:cardBackgroundColor="@color/transparent"
     android:layout_marginVertical="4dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -29,6 +30,7 @@
             app:shapeAppearanceOverlay="@style/rounded_bg" />
 
         <TextView
+            android:textColor="@color/white"
             android:id="@+id/txtArtistName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

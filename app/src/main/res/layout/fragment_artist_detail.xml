@@ -39,8 +39,7 @@
             android:layout_height="40dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:background="@drawable/rounded_bg"
-            android:src="@drawable/back_arror"
+            android:src="@drawable/ic_back_arrow"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -60,9 +59,9 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:background="#32000000"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -89,6 +88,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:textColor="@color/white"
                 android:id="@+id/txtPopularSongs"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -102,6 +102,7 @@
 
 
                 <androidx.recyclerview.widget.RecyclerView
+                    android:background="@color/black"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     android:id="@+id/rvArtistSong"
                     android:layout_width="match_parent"
@@ -112,13 +113,14 @@
 
 
             <TextView
+                android:textColor="@color/white"
                 android:id="@+id/txtRelatedArtist"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="18dp"
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/poppins_medium"
-                android:text="People also listened to"
+                android:text="Related Artist"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rvArtistSong" />
@@ -136,6 +138,7 @@
 
 
             <TextView
+                android:textColor="@color/white"
                 android:id="@+id/txtArtistAlbum"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

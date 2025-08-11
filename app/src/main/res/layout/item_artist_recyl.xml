@@ -3,6 +3,7 @@
     app:cardElevation="0dp"
     app:cardCornerRadius="0dp"
     android:background="@color/transparent"
+    app:cardBackgroundColor="@color/transparent"
     android:layout_marginStart="10dp"
     android:layout_marginEnd="10dp"
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -27,6 +28,7 @@
             app:shapeAppearanceOverlay="@style/rounded_bg" />
 
         <TextView
+            android:textColor="@color/white"
             android:id="@+id/txtArtistName"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
@@ -35,7 +37,7 @@
             android:ellipsize="end"
             android:maxLines="2"
             android:text="This is Artist Name"
-            android:textSize="13sp" />
+            android:textSize="16sp" />
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

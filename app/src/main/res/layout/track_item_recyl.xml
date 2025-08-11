@@ -7,6 +7,8 @@
     android:layout_height="wrap_content"
     android:layout_marginStart="10dp"
     android:layout_marginEnd="10dp"
+    app:cardCornerRadius="5dp"
+
     android:layout_marginTop="8dp"
     android:layout_marginVertical="4dp">
 
@@ -24,6 +26,7 @@
             tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
+            android:textColor="@color/white"
             android:id="@+id/txtTrackName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -37,6 +40,7 @@
             tools:text="Track Name" />
 
         <TextView
+            android:textColor="@color/white"
             android:id="@+id/txtArtistName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
